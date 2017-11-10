@@ -9,6 +9,7 @@
 #' @import ggplot2
 #' @import data.table
 #' @export
+#comment
 
 plt.sci <- function(M,
                     colmin,
