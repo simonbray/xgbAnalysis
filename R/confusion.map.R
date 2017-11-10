@@ -2,27 +2,26 @@
 #' 
 #' makes a confusion matrix and plot for missclassification
 #' 
-# @param savefolder
+#' @param dir output directory
 #' @param pred prediction file
 #' @param average NA, 'label' or 'prediction'. Default = NA
-#' @param no.diagonal should diagonal not be plotted for better visibility of missclassification? default = T
+#' @param noDiagonal should diagonal not be plotted for better visibility of missclassification? default = T
 #' @import data.table
 #' @import ggplot2
 #' @import caret
 #' @import plotly
 #' @import dplyr
 #' @example 
-#' confusion.map("model/prediction", average = 'prediction')
+#' confusion.map(dir = "/confusionMap", pred = "model/prediction", average = 'prediction', noDiagonal = F)
 #' @export
 
-confusion.map <- function(#savefolder,
+confusion.map <- function(dir = "/confusionMap",
                           pred,
                           average = NULL,
-                          no.diagonal = T) {
+                          noDiagonal = T) {
   
-  #setwd(savefolder)
   savename <- "cunfusion.map"
-  dir.create("confusion.map")
+  dir.create(dirname(dir))
   test.index <- fread("test.index", header = F)$V1
   prm <- fread("import.data.parameter")
   sts <- fread(prm$sts)$V1[test.index]
@@ -33,7 +32,7 @@ confusion.map <- function(#savefolder,
   #make confusion matrix
   cm <- confusionMatrix(pred, sts)
   cm <- cm$table
-  write.table(cm, "confusion.map/confusion.matrix", row.names = F, col.names = F)
+  write.table(cm, paste(dir, "confusion.matrix", sep = "/"), row.names = F, col.names = F)
   
   #make average of predicted values
   if(average == "label"){
@@ -49,7 +48,7 @@ confusion.map <- function(#savefolder,
   } else if(!is.null(average)){
     stop("average must be 'prediction'(=default), 'label' or NULL")
   }
-  if(no.diagonal) {
+  if(noDiagonal) {
     for(i in 1:num.class) {
       cm[i,i] <- 0
     }
@@ -80,6 +79,6 @@ confusion.map <- function(#savefolder,
     scale_y_continuous(breaks=1:num.class-1, 
                        labels = label, 
                        expand = c(0,0))
-  ggsave(paste("confusion.map/", savename, ".png", sep = ""), p, width = pdim, height = pdim)
+  ggsave(paste(dir, "/", savename, ".png", sep = ""), p, width = pdim, height = pdim)
   
 }

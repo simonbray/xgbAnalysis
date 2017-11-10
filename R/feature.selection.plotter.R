@@ -2,10 +2,11 @@
 #' 
 #' plots accuracy while features are dismissed iteratively
 #' 
-# @param savefolder
+#' @param dir path of 'feature.selection' file. See function 'feature.selection'.
 #' @param pdim dimension of plot, default=10
 #' @param width proportion of width to height, default=1.5
 #' @param saveplot save plot?(T/F) default = T
+#' @param pre plot prefix
 #' @param xlim zoom on x-axis, e.g. xlim = 280:300
 #' @param ylim zoom an y-axis, e.g. ylim = c(0,0.25). Use c() with other than natural numbers
 #' @import data.table
@@ -14,19 +15,20 @@
 #' @export
 #ToDo: colors(maybe "Dark")
 
-feature.selection.plotter <- function(#savefolder,
+feature.selection.plotter <- function(dir = "/featureSelection",
                                       decreasing = F,
                                       pdim = 10,
                                       width = 1.5,
                                       saveplot = T,
+                                      pre = "",
                                       xlim = NA,
                                       ylim = NA)  {
   #setwd(savefolder)
-  if(decreasing){
-    dir <- "./feature.selection/decreasing"
-  } else {
-    dir <- "./feature.selection/increasing"
-  }
+  # if(decreasing){
+  #   dir <- "./feature.selection/decreasing"
+  # } else {
+  #   dir <- "./feature.selection/increasing"
+  # }
   dir.create(paste(dir, "plot", sep = "/"), showWarnings = F)
   if(!file.exists(paste(dir, "/feature.selection", sep = "/")))  {
     stop("File 'feature.selection' not found. Run function 'feature.selection' first!")
@@ -59,7 +61,7 @@ feature.selection.plotter <- function(#savefolder,
           legend.background = element_rect(colour = "black")
           )
   if(saveplot)  {
-    ggsave(filename = paste(dir, "plot/all.png", sep = "/"),
+    ggsave(filename = paste(dir, "/plot/", pre, "all.png", sep = ""),
            p, width = pdim*width, height = pdim)
   }
   if(!is.na(xlim[1]) & !is.na(ylim[1]))  {
@@ -70,7 +72,7 @@ feature.selection.plotter <- function(#savefolder,
     p <- p + coord_cartesian(ylim = ylim)
   }
   if(!is.na(xlim[1]) | !is.na(ylim[1]) & saveplot) {
-    ggsave(filename = paste(dir, "plot/zoom.png", sep = "/"),
+    ggsave(filename = paste(dir, "/plot/", pre, "zoom.png", sep = ""),
            p, width = pdim*width, height = pdim)
   }
   return(p)

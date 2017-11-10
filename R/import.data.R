@@ -1,8 +1,8 @@
 #' import data
+#' @param savefolder output folder
 #' @param crd coordinate file to import, e.g. dihedrals
 #' @param sts states file to import that match coordinates
 #' @param label coordinate label, as file link or 'dihedrals' for Phi2, Psi2, Phi3, ...
-#' @param savefolder output folder
 #' @param trainsplit how much of the data for training, rest for test
 #' @import data.table
 #' @import xgboost
@@ -24,7 +24,7 @@
 #' @export
 #ToDo: savename for save prefix?
 
-import.data <- function(crd, sts, label, savefolder, trainsplit, savename = "") {
+import.data <- function(savefolder, crd, sts, label, trainsplit) {
   dir.create(savefolder, showWarnings = F, recursive = T)
   setwd(savefolder)
   
@@ -39,11 +39,13 @@ import.data <- function(crd, sts, label, savefolder, trainsplit, savename = "") 
   dih <- fread(crd, showProgress = F)
   if(label == "dihedrals")  {
     label <- c(paste(c("Phi", "Psi"), rep(1:(length(dih[1,])/2)+1, each = 2), sep=""))
-    colnames(dih) <- label
   } else {
-      label <- fread(label, showProgress = F)
-      colnames(dih) <- label$V1
+    label <- fread(label, sep = "/", header = F)$V1
+    if(substr(label[1],1,1)=="#"){
+      label <- label[-1]
+      }
   }
+  colnames(dih) <- label
   write.table(colnames(dih), "feature.names", row.names = F, col.names = F)
   sts <- fread(sts, showProgress = F)
   colnames(sts) <- c("states")

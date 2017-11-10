@@ -2,7 +2,7 @@
 #' 
 #' dismisses features iteratively by importance and monitors accuracy
 #' 
-# @param savefolder
+#' @param dir
 #' @param decreasing decreasing = F :least important feature will be dismissed
 #' @param eta
 #' @param nrounds
@@ -12,7 +12,7 @@
 #' @import xgboost
 #' @import data.table
 #' @example 
-#' feature.selection(decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
+#' feature.selection(dir = "/featureSelection", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
 #' @details 
 #' Trains iteratively a xgb model while dismissing features by importance and monitoring accuracy.
 #' Decreasing will dismiss the most important feature each round, increasing (default) the least important.
@@ -26,15 +26,14 @@
 #' @export
 #ToDo: exists testsplit:rearrange accuracy; set new parameter (eta,max_depth) or take from parameter file?
 
-feature.selection <- function(#savefolder,
+feature.selection <- function(dir = "/featureSelection",
                               decreasing = F,
                               eta = 0.3,
                               max_depth = 6,
                               nrounds = 20,
                               nthread = 0,
                               savemode = T) {
-
-  #setwd(savefolder)
+  
   check.import.parameter()
   
   prm <- fread("import.data.parameter")
@@ -42,12 +41,12 @@ feature.selection <- function(#savefolder,
   sts <- prm$sts
   label <- prm$label
   
-  if(decreasing){
-    dir <- "/feature.selection/decreasing"
-  } else {
-    dir <- "feature.selection/increasing"
-  }
-  dir.create(dir)
+  # if(decreasing){
+  #   dir <- "/feature.selection/decreasing"
+  # } else {
+  #   dir <- "/feature.selection/increasing"
+  # }
+  dir.create(dirname(dir), showWarnings = F)
   
   write.csv(list(decreasing = decreasing,
                  eta = eta, 
@@ -62,11 +61,13 @@ feature.selection <- function(#savefolder,
   dih <- fread(crd)
   if(label == "dihedrals")  {
     label <- c(paste(c("Phi", "Psi"), rep(1:(length(dih[1,])/2)+1, each = 2), sep=""))
-    colnames(dih) <- label
   } else {
-    label <- fread(label)
-    colnames(dih) <- label$V1
+    label <- fread(label, sep = "/", header = F)$V1
+    if(substr(label[1],1,1)=="#"){
+      label <- label[-1]
+    }
   }
+  colnames(dih) <- label
   sts <- fread(sts)
   colnames(sts) <- c("states")
   num.class = max(sts[,1])

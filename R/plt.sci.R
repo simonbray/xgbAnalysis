@@ -3,16 +3,14 @@
 #' plots importance from single.class.importance
 #'
 #' @param M importance matrix of model
-#' @param colmin minimum, each feature has to contribute to at least one class
+#' @param savename
 #' @param pdim plot dimension (height)
 #' @param width plot width (pdim*width)
 #' @import ggplot2
 #' @import data.table
-#' @export
-#comment
 
 plt.sci <- function(M,
-                    colmin,
+                    savename,
                     pdim,
                     width)  {
   
@@ -50,6 +48,6 @@ plt.sci <- function(M,
                     labels = rnames, 
                     expand = c(0,0))
   
-  ggsave(paste("single.class.importance/sci_colmin", colmin, ".png", sep = ""), p, width = pdim*width, height = pdim)
+  ggsave(paste(savename, ".png", sep = ""), p, width = pdim*width, height = pdim)
   
 }
