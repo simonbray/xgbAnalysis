@@ -7,5 +7,5 @@
 get.parameter(parameter)
 }
 \description{
-opens parameter file and extracts requested parameter
+opens parameter file and returns requested parameter
 }

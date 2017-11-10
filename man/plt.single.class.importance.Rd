@@ -4,8 +4,19 @@
 \alias{plt.single.class.importance}
 \title{single class importance plotter}
 \usage{
-plt.single.class.importance(model = NA, colmin = 0, pdim = 10,
-  width = 1)
+plt.single.class.importance(pre = "singleClassImportance/sci", model = NA,
+  colmin = NA, nfeatures = NA, pdim = 10, width = 1)
+}
+\arguments{
+\item{model}{directory to xgb.model file. If NA (default) model from ./model/xgb.model is taken.}
+
+\item{colmin}{Sets minimum of imnportance a feature has to contribute to at least one class. Can be set as vector to produce multiple plots: colmin = c(0.1,0.2,0.3)}
+
+\item{nfeatures}{Returns plot with 'nfeatures' most important features. Can be set as vector to produce multiple plots: c(4,5,6)}
+
+\item{pdim}{plot dimension (height = pdim)}
+
+\item{width}{plot width (pdim*width)}
 }
 \description{
 plots importance from single.class.importance

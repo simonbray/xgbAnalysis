@@ -4,15 +4,20 @@
 \alias{feature.selection.plotter}
 \title{plots accuracy loss from feature.selection}
 \usage{
-feature.selection.plotter(decreasing = F, pdim = 10, width = 1.5,
-  saveplot = T, xlim = NA, ylim = NA)
+feature.selection.plotter(dir = "/featureSelection", decreasing = F,
+  pdim = 10, width = 1.5, saveplot = T, pre = "", xlim = NA,
+  ylim = NA)
 }
 \arguments{
+\item{dir}{path of 'feature.selection' file. See function 'feature.selection'.}
+
 \item{pdim}{dimension of plot, default=10}
 
 \item{width}{proportion of width to height, default=1.5}
 
 \item{saveplot}{save plot?(T/F) default = T}
+
+\item{pre}{plot prefix}
 
 \item{xlim}{zoom on x-axis, e.g. xlim = 280:300}
 

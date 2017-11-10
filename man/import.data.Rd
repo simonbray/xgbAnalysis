@@ -4,16 +4,16 @@
 \alias{import.data}
 \title{import data}
 \usage{
-import.data(crd, sts, label, savefolder, trainsplit, savename = "")
+import.data(savefolder, crd, sts, label, trainsplit)
 }
 \arguments{
+\item{savefolder}{output folder}
+
 \item{crd}{coordinate file to import, e.g. dihedrals}
 
 \item{sts}{states file to import that match coordinates}
 
 \item{label}{coordinate label, as file link or 'dihedrals' for Phi2, Psi2, Phi3, ...}
-
-\item{savefolder}{output folder}
 
 \item{trainsplit}{how much of the data for training, rest for test}
 }

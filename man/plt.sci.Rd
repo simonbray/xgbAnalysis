@@ -4,12 +4,10 @@
 \alias{plt.sci}
 \title{single class importance plotter}
 \usage{
-plt.sci(M, colmin, pdim, width)
+plt.sci(M, savename, pdim, width)
 }
 \arguments{
 \item{M}{importance matrix of model}
-
-\item{colmin}{minimum, each feature has to contribute to at least one class}
 
 \item{pdim}{plot dimension (height)}
 

@@ -4,8 +4,8 @@
 \alias{feature.selection}
 \title{accuracy loss data}
 \usage{
-feature.selection(decreasing = F, eta = 0.3, max_depth = 6,
-  nrounds = 20, nthread = 0, savemode = T)
+feature.selection(dir = "/featureSelection", decreasing = F, eta = 0.3,
+  max_depth = 6, nrounds = 20, nthread = 0, savemode = T)
 }
 \arguments{
 \item{decreasing}{decreasing = F :least important feature will be dismissed}

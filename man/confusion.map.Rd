@@ -4,14 +4,16 @@
 \alias{confusion.map}
 \title{confusion map}
 \usage{
-confusion.map(pred, average = NULL, no.diagonal = T)
+confusion.map(dir = "/confusionMap", pred, average = NULL, noDiagonal = T)
 }
 \arguments{
+\item{dir}{output directory}
+
 \item{pred}{prediction file}
 
 \item{average}{NA, 'label' or 'prediction'. Default = NA}
 
-\item{no.diagonal}{should diagonal not be plotted for better visibility of missclassification? default = T}
+\item{noDiagonal}{should diagonal not be plotted for better visibility of missclassification? default = T}
 }
 \description{
 makes a confusion matrix and plot for missclassification
