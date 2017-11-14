@@ -15,7 +15,7 @@
 #' @export
 #ToDo: colors(maybe "Dark")
 
-feature.selection.plotter <- function(dir = "/featureSelection",
+feature.selection.plotter <- function(dir = "featureSelection",
                                       decreasing = F,
                                       pdim = 10,
                                       width = 1.5,
@@ -29,13 +29,17 @@ feature.selection.plotter <- function(dir = "/featureSelection",
   # } else {
   #   dir <- "./feature.selection/increasing"
   # }
-  dir.create(paste(dir, "plot", sep = "/"), showWarnings = F)
+  if(!dir.exists(paste(dir, "plot", sep = "/"))){
+    dir.create(paste(dir, "plot", sep = "/"), showWarnings = F)
+  }
   if(!file.exists(paste(dir, "/feature.selection", sep = "/")))  {
     stop("File 'feature.selection' not found. Run function 'feature.selection' first!")
   }
   M <- as.data.frame(fread(paste(dir, "feature.selection", sep = "/")))
   num.class <- dim(M)[2] - 3
   M <- M[,-2]
+  colnames(M)[3:(num.class+2)] <- paste("State", 1:num.class)
+  colnames(M)[2] <- "Accuracy"
   color <- c(1, colorRampPalette(brewer.pal(12, "Paired"))(num.class))
 
   p <- ggplot(melt(M, id.vars = "round")) + 
@@ -75,5 +79,7 @@ feature.selection.plotter <- function(dir = "/featureSelection",
     ggsave(filename = paste(dir, "/plot/", pre, "zoom.png", sep = ""),
            p, width = pdim*width, height = pdim)
   }
-  return(p)
+  if(!saveplot){
+    return(p)
+  }
 }

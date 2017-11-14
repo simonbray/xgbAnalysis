@@ -4,7 +4,7 @@
 \alias{feature.selection.plotter}
 \title{plots accuracy loss from feature.selection}
 \usage{
-feature.selection.plotter(dir = "/featureSelection", decreasing = F,
+feature.selection.plotter(dir = "featureSelection", decreasing = F,
   pdim = 10, width = 1.5, saveplot = T, pre = "", xlim = NA,
   ylim = NA)
 }

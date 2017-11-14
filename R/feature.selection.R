@@ -46,7 +46,7 @@ feature.selection <- function(dir = "/featureSelection",
   # } else {
   #   dir <- "/feature.selection/increasing"
   # }
-  dir.create(dirname(dir), showWarnings = F)
+  dir.create(dir, showWarnings = T)
   
   write.csv(list(decreasing = decreasing,
                  eta = eta, 
@@ -62,7 +62,9 @@ feature.selection <- function(dir = "/featureSelection",
   if(label == "dihedrals")  {
     label <- c(paste(c("Phi", "Psi"), rep(1:(length(dih[1,])/2)+1, each = 2), sep=""))
   } else {
+    #read label from file
     label <- fread(label, sep = "/", header = F)$V1
+    #remove first line, if comment
     if(substr(label[1],1,1)=="#"){
       label <- label[-1]
     }
@@ -138,6 +140,7 @@ feature.selection <- function(dir = "/featureSelection",
       dih <- dih[,colnames(dih)!=as.character(imp[1,1])]
       if(is.numeric(dih)){
         dih <- as.matrix(dih)
+        colnames(dih) <- as.character(imp[1,1])
       }
       train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
       if(file.exists("test.index")) {
