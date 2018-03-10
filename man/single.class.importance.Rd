@@ -2,13 +2,19 @@
 % Please edit documentation in R/single.class.importance.R
 \name{single.class.importance}
 \alias{single.class.importance}
-\title{single class importance}
+\title{Single Class Importance}
 \usage{
-single.class.importance(model = NA, x)
+single.class.importance(model_fn, feature_names_fn, x)
 }
 \arguments{
+\item{model_fn}{name of the file storing the xgb model
+(see \link{train.model})}
+
+\item{feature_names_fn}{name of the file storing the feature names
+(see \link{import.data})}
+
 \item{x}{class for which importance should be calculated}
 }
 \description{
-calculates importance of single class from xgb.model
+Calculate the importance of a single class from a given xgb Model.
 }
