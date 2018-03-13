@@ -2,14 +2,14 @@
 #' 
 #' calculates importance of single class from xgb.model
 #'
-# @param savefolder
 #' @param x class for which importance should be calculated
+#' @param label path to feature names
 #' @import xgboost
 #' @import data.table
 #' @export
 
-single.class.importance <- function(#savefolder,
-                                    model = NA,
+single.class.importance <- function(model = NA,
+                                    names = NA,
                                     x)  {
   
   if(is.na(model))  {
@@ -17,7 +17,15 @@ single.class.importance <- function(#savefolder,
   } else {
     bst <- xgb.load(model)
   }
-  label <- fread("feature.names", header = F)$V1
+  if(is.na(names))  {
+    label <- fread("feature.names", header = F)$V1
+  } else {
+    label <- fread(names, sep = "/", header = F)$V1
+    if(substr(label[1],1,1)=="#"){
+      label <- label[-1]
+    }
+  }
+
   
   dt <- xgb.model.dt.tree(label, bst)
   num.class <- get.parameter("num_class")
