@@ -1,7 +1,7 @@
 #' plots accuracy loss from feature.selection
-#' 
+#'
 #' plots accuracy while features are dismissed iteratively
-#' 
+#'
 #' @param dir path of 'feature.selection' file. See function 'feature.selection'.
 #' @param pdim dimension of plot, default=10
 #' @param width proportion of width to height, default=1.5
@@ -15,7 +15,7 @@
 #' @export
 #ToDo: colors(maybe "Dark")
 
-feature.selection.plotter <- function(dir = "featureSelection",
+plt.feature.selection <- function(dir = "featureSelection",
                                       decreasing = F,
                                       pdim = 10,
                                       width = 1.5,
@@ -42,14 +42,14 @@ feature.selection.plotter <- function(dir = "featureSelection",
   colnames(M)[2] <- "Accuracy"
   color <- c(1, colorRampPalette(brewer.pal(12, "Paired"))(num.class))
 
-  p <- ggplot(melt(M, id.vars = "round")) + 
+  p <- ggplot(melt(M, id.vars = "round")) +
     geom_point(aes(round, value, color = variable, size = variable), shape = 4) +
-    geom_line(aes(round, value, color = variable)) + 
+    geom_line(aes(round, value, color = variable)) +
     scale_size_manual(values = c(0,rep(pdim/5, num.class))) +
     scale_color_manual(values = color) +
     theme_bw(base_size = pdim*3) +
     labs(title = "Accuracy loss plot",
-         x="number of dismissed features", 
+         x="number of dismissed features",
          y="accuracy") +
     theme(plot.title = element_text(face = "bold.italic", hjust = 0.5),
           plot.subtitle = element_text(size = pdim*2),

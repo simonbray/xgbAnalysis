@@ -1,8 +1,9 @@
 #' accuracy loss data
-#' 
+#'
 #' dismisses features iteratively by importance and monitors accuracy
-#' 
-#' @param dir
+#'
+#' @param output_dir output directory
+#' @param impdata file to import data parameter
 #' @param decreasing decreasing = F :least important feature will be dismissed
 #' @param eta
 #' @param nrounds
@@ -11,9 +12,9 @@
 #' @param savemode save xgb models (T/F)
 #' @import xgboost
 #' @import data.table
-#' @example 
-#' feature.selection(dir = "/featureSelection", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
-#' @details 
+#' @example
+#' feature.selection(output_dir = "/featureSelection", impdata = "data/import.data.parameter", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
+#' @details
 #' Trains iteratively a xgb model while dismissing features by importance and monitoring accuracy.
 #' Decreasing will dismiss the most important feature each round, increasing (default) the least important.
 #' The file 'feature.importance' will contain an ordered list of all dismissed features. The param
@@ -26,38 +27,39 @@
 #' @export
 #ToDo: exists testsplit:rearrange accuracy; set new parameter (eta,max_depth) or take from parameter file?
 
-feature.selection <- function(dir = "/featureSelection",
+feature.selection <- function(output_dir = "/featureSelection",
+                              impdata = "data/import.data.parameter",
                               decreasing = F,
                               eta = 0.3,
                               max_depth = 6,
                               nrounds = 20,
                               nthread = 0,
                               savemode = T) {
-  
-  check.import.parameter()
-  
-  prm <- fread("import.data.parameter")
+
+  # check.import.parameter()
+
+  prm <- fread(impdata)
   crd <- prm$crd
   sts <- prm$sts
   label <- prm$label
-  
+
   # if(decreasing){
-  #   dir <- "/feature.selection/decreasing"
+  #  output_dir <- "/feature.selection/decreasing"
   # } else {
-  #   dir <- "/feature.selection/increasing"
+  #  output_dir <- "/feature.selection/increasing"
   # }
-  dir.create(dir, showWarnings = F)
-  
+  dir.create(output_dir, showWarnings = F)
+
   write.csv(list(decreasing = decreasing,
-                 eta = eta, 
+                 eta = eta,
                  max_depth = max_depth,
-                 nrounds = nrounds,  
-                 nthread = nthread), 
-            paste(dir, "parameter", sep = "/"), 
+                 nrounds = nrounds,
+                 nthread = nthread),
+            paste(output_dir, "parameter", sep = "/"),
             row.names = F)
-  
+
   impfeature = 'Gain' #change if neccessary
-  
+
   dih <- fread(crd)
   if(label == "dihedrals")  {
     label <- c(paste(c("Phi", "Psi"), rep(1:(length(dih[1,])/2)+1, each = 2), sep=""))
@@ -73,7 +75,7 @@ feature.selection <- function(dir = "/featureSelection",
   sts <- fread(sts)
   colnames(sts) <- c("states")
   num.class = max(sts[,1])
-  
+
   #as matrix
   dih <- as.matrix(dih)
   sts <- as.matrix(sts)
@@ -82,7 +84,7 @@ feature.selection <- function(dir = "/featureSelection",
   #split train data
   train.index <- fread("train.index", header = F)$V1
   train.matrix <- xgb.DMatrix(data = dih[train.index,], label = sts[train.index,])
-  
+
   #split test data
   if(file.exists("test.index")) {
     test.index <- fread("test.index", header = F)$V1
@@ -94,14 +96,14 @@ feature.selection <- function(dir = "/featureSelection",
   }
 
   selectrounds <- dim(dih)[2]-1
-  
+
   M <- matrix(nrow = 1 + selectrounds, ncol = 3 + num.class)
   M <- as.data.frame(M)
   colnames(M) <- c("round", "feature dismissed", "accuracy", 1:num.class)
-  
+
   for(i in 0:selectrounds) {
     ##xgboost
-    bst <- xgb.train(data = train.matrix, 
+    bst <- xgb.train(data = train.matrix,
                      watchlist = watchlist,
                      eval_metric = 'merror',
                      objective = 'multi:softmax',
@@ -117,7 +119,7 @@ feature.selection <- function(dir = "/featureSelection",
       M[i+1,j+4] <- round(sum((test.label == j) & (pred == j))/sum(test.label == j) -
                             sum((pred == j) & (test.label != j))/length(test.label), 4)
     }
-    
+
     feature.names <- colnames(dih)
     ##save
 
@@ -130,11 +132,11 @@ feature.selection <- function(dir = "/featureSelection",
       imp <- imp[sort.list(imp$Frequency, decreasing = decreasing),]
     }
     M[i+1,2] <- as.character(imp[1,1])
-    write.table(M, paste(dir, "/feature.selection", sep = ""), row.names = F)
+    write.table(M, paste(output_dir, "/feature.selection", sep = ""), row.names = F)
     if(savemode)  {
-      xgb.save(bst, paste(dir, "/selectround", i, ".model", sep=""))
-      write.table(imp, file = paste(dir, "/selectround", i, ".importance", sep = ""))
-      write.table(cbind("prediction" = pred), file = paste(dir, "/selectround", i, ".prediction", sep = ""), row.names = F, col.names = F)
+      xgb.save(bst, paste(output_dir, "/selectround", i, ".model", sep=""))
+      write.table(imp, file = paste(output_dir, "/selectround", i, ".importance", sep = ""))
+      write.table(cbind("prediction" = pred), file = paste(output_dir, "/selectround", i, ".prediction", sep = ""), row.names = F, col.names = F)
     }
     if(i<selectrounds){
       dih <- dih[,colnames(dih)!=as.character(imp[1,1])]

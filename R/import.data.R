@@ -67,9 +67,10 @@ import.data <- function(output_dir, coords, states, labels, trainsplit) {
   num.class <- length(levels(states))
   states <- as.numeric(states) - 1 #for xgboost multi:softprobe states must begin from 0
 
-  set.parameter(list(num_class=num.class))
-  
-  
+  set.parameter(paste(output_dir, "parameter", sep="/"),
+                list(num_class=num.class))
+
+
   #as matrix
   dih <- as.matrix(dih)
   states <- as.matrix(states)
