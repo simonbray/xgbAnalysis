@@ -4,10 +4,15 @@
 \alias{feature.selection}
 \title{accuracy loss data}
 \usage{
-feature.selection(dir = "/featureSelection", decreasing = F, eta = 0.3,
+feature.selection(output_dir = "/featureSelection",
+  impdata = "data/import.data.parameter", decreasing = F, eta = 0.3,
   max_depth = 6, nrounds = 20, nthread = 0, savemode = T)
 }
 \arguments{
+\item{output_dir}{output directory}
+
+\item{impdata}{file to import data parameter}
+
 \item{decreasing}{decreasing = F :least important feature will be dismissed}
 
 \item{nthread}{0 for all}

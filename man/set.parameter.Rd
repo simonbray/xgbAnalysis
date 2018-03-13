@@ -4,7 +4,7 @@
 \alias{set.parameter}
 \title{Set parameter.}
 \usage{
-set.parameter(parameter = list())
+set.parameter(output_dir, input_params = NA, parameter = list())
 }
 \arguments{
 \item{parameter}{list of parameters (for all parameters  not included in this

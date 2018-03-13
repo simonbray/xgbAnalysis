@@ -5,7 +5,7 @@
 \title{single class importance plotter}
 \usage{
 plt.single.class.importance(pre = "singleClassImportance/sci", model = NA,
-  colmin = NA, nfeatures = NA, pdim = 10, width = 1)
+  names = NA, colmin = NA, nfeatures = NA, pdim = 10, width = 1)
 }
 \arguments{
 \item{model}{directory to xgb.model file. If NA (default) model from ./model/xgb.model is taken.}

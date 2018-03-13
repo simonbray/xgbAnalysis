@@ -14,6 +14,8 @@ single.class.importance(model_fn, feature_names_fn, x)
 (see \link{import.data})}
 
 \item{x}{class for which importance should be calculated}
+
+\item{label}{path to feature names}
 }
 \description{
 Calculate the importance of a single class from a given xgb Model.

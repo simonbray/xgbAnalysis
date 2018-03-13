@@ -4,7 +4,7 @@
 \alias{get.parameter}
 \title{Get parameter.}
 \usage{
-get.parameter(parameter)
+get.parameter(params, parameter)
 }
 \arguments{
 \item{parameter}{parameters}

@@ -4,12 +4,12 @@
 \alias{train.model}
 \title{Train xgboost model.}
 \usage{
-train.model(data_dir, output_dir, params, num_class, nrounds = 20)
+train.model(data_dir, output_dir, params = NA, nrounds = 20)
 }
 \arguments{
-\item{num_class}{TODO why is this not taken from parameter file}
-
 \item{nrounds}{TODO why is this not taken from parameter file}
+
+\item{num_class}{TODO why is this not taken from parameter file}
 }
 \description{
 TODO: detailed description.

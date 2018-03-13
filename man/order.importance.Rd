@@ -4,7 +4,7 @@
 \alias{order.importance}
 \title{order importance}
 \usage{
-order.importance(M, decreasing = F)
+order.importance(M, sts = NA, decreasing = F)
 }
 \arguments{
 \item{M}{importance matrix of model}
