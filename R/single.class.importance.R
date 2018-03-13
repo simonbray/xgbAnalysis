@@ -21,7 +21,8 @@ single.class.importance <- function(model_fn, feature_names_fn, x)  {
   }
 
   dt <- xgb.model.dt.tree(label, bst)
-  num.class <- get.parameter("num_class")
+  num.class <- get.parameter(params="data/train.parameter",
+                             parameter="num_class")
   nrounds <- (max(dt[,1]) + 1)/num.class
 
   #creating list with corresponding tree indices

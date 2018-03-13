@@ -29,7 +29,8 @@ plt.single.class.importance <- function(pre = "singleClassImportance/sci",
       label <- label[-1]
     }
   }
-  num.class <- get.parameter("num_class")
+  num.class <- get.parameter(params="data/train.parameter",
+                             parameter="num_class")
   impfeature = "Gain" #change if neccessary to 'Cover' or 'Frequency'
 
   #label <- rev(label)
@@ -38,7 +39,7 @@ plt.single.class.importance <- function(pre = "singleClassImportance/sci",
   rownames(M) <- rev(label)
 
   for(i in 1:num.class) {
-    sci <- single.class.importance(model = model, names = names, i)
+    sci <- single.class.importance(model_fn = model, feature_names_fn = names, i)
     M[label,i] <- sci[label,impfeature]
   }
   write.csv(M, paste(pre, "_data", sep = ""))
