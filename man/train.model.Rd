@@ -2,10 +2,16 @@
 % Please edit documentation in R/train.model.R
 \name{train.model}
 \alias{train.model}
-\title{train model}
+\title{Train xgboost model.}
 \usage{
-train.model(savefolder, nrounds = 20)
+train.model(data_dir, output_dir, params, num_class, nrounds = 20)
+}
+\arguments{
+\item{num_class}{TODO why is this not taken from parameter file}
+
+\item{nrounds}{TODO why is this not taken from parameter file}
 }
 \description{
-trains xgboost model
+TODO: detailed description.
+TODO: Parameter, test.matrix (?)
 }

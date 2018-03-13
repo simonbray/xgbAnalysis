@@ -1,52 +1,45 @@
-#' train model
-#' 
-#' trains xgboost model
+#' Train xgboost model.
 #'
-#' @param savefolder
-#' @param nrounds
+#' TODO: detailed description.
+#' TODO: Parameter, test.matrix (?)
+#'
+#' @param data_dir
+#' @param output_dir
+#' @param num_class TODO why is this not taken from parameter file
+#' @param nrounds TODO why is this not taken from parameter file
 #' @import xgboost
-#' @import data.table
+#' @importFrom data.table fread
 #' @export
-#ToDo: Parameter, test.matrix
-train.model <- function(savefolder,
-                        nrounds = 20) {
-  setwd(savefodler)
-  dir.create("model")
-  parameter <- as.list(fread(parameter))
-  train.matrix <- xgb.DMatrix("train.matrix.data")
-  test.matrix <- xgb.DMatrix("test.matrix.data")
+
+train.model <- function(data_dir, output_dir, params, num_class, nrounds = 20) {
+
+  # check if output dir exists and create it if not
+  if(!dir.exists(output_dir)) {
+    message(paste("Creating output directory", output_dir))
+    dir.create(output_dir, showWarnings = F, recursive = T)
+  }
+
+  # read train and test data
+  message("Reading training and test data ...")
+  train.matrix <- xgb.DMatrix(paste(data_dir, "train.xgb.Dmatrix", sep="/"))
+  test.matrix  <- xgb.DMatrix(paste(data_dir, "test.xgb.Dmatrix", sep="/"))
+  message("... finished.")
+
   watchlist <- c(train = train.matrix, test = test.matrix)
-  num.class <- get.num.class(train.matrix, test.matrix)
-  label <- fread("feature.names", header = F)$V1
-  
-  if(!("eval_metric" %in% parameter)) {
-    parameter <- c(parameter, eval_metric = 'merror')
-  }
-  if(!("objective" %in% parameter)) {
-    parameter <- c(parameter, objective = 'multi:softmax')
-  }
-  if(!("num_class" %in% parameter)) {
-    parameter <- c(parameter, num_class = num.class)
-  }
-  if(!("nthread" %in% parameter)) {
-    parameter <- c(parameter, nthread = 0)
-  }
-  if(!("eta" %in% parameter)) {
-    parameter <- c(parameter, eta = 0.3)
-  }
-  if(!("max_depth" %in% parameter)) {
-    parameter <- c(parameter, max_depth = 6)
-  }
-  
-  bst <- xgb.train(data = train.matrix, 
-                   watchlist = watchlist, 
-                   params = parameter,
-                   nrounds = nrounds
-                   )
-  ##save
-  xgb.save(bst, paste("model/xgb.model", sep=""))
-  xgb.dump(bst, paste("model/xgb.dump.model", sep=""), with_stats = TRUE)
+  label <- fread(paste(data_dir, "feature.names", sep="/"), header = F)[[1]]
+
+  # TODO check if num_class is correct?
+
+  message("Training xgboost model ...")
+  bst <- xgb.train(data = train.matrix,
+                   watchlist = watchlist,
+                   params = params,
+                   nrounds = nrounds)
+  message("... finished.")
+
+  # Save results, TODO: message(...) which files are stored where
+  xgb.save(bst, paste(output_dir, "xgb.model", sep="/"))
+  xgb.dump(bst, paste(output_dir, "xgb.dump.model", sep="/"), with_stats = TRUE)
   imp <- xgb.importance(model = bst, feature_names = label)
-  write.csv(imp, "model/importance")
-  
-  }
+  write.csv(imp, paste(output_dir, "importance", sep="/"))
+}
