@@ -14,13 +14,21 @@
 
 plt.single.class.importance <- function(pre = "singleClassImportance/sci",
                                         model = NA,
+                                        names = NA,
                                         colmin = NA,
                                         nfeatures = NA,
                                         pdim = 10,
                                         width = 1)  {
   
   dir.create(dirname(pre), showWarnings = F)
-  label <- fread("feature.names",showProgress = F ,header = F)$V1
+  if(is.na(names))  {
+    label <- fread("feature.names", header = F)$V1
+  } else {
+    label <- fread(names, sep = "/", header = F)$V1
+    if(substr(label[1],1,1)=="#"){
+      label <- label[-1]
+    }
+  }
   num.class <- get.parameter("num_class")
   impfeature = "Gain" #change if neccessary to 'Cover' or 'Frequency'
   
@@ -30,7 +38,7 @@ plt.single.class.importance <- function(pre = "singleClassImportance/sci",
   rownames(M) <- rev(label)
   
   for(i in 1:num.class) {
-    sci <- single.class.importance(model = model, i)
+    sci <- single.class.importance(model = model, names = names, i)
     M[label,i] <- sci[label,impfeature]
   }
   write.csv(M, paste(pre, "_data", sep = ""))

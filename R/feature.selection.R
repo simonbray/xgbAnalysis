@@ -46,7 +46,7 @@ feature.selection <- function(dir = "/featureSelection",
   # } else {
   #   dir <- "/feature.selection/increasing"
   # }
-  dir.create(dir, showWarnings = T)
+  dir.create(dir, showWarnings = F)
   
   write.csv(list(decreasing = decreasing,
                  eta = eta, 
@@ -138,7 +138,7 @@ feature.selection <- function(dir = "/featureSelection",
     }
     if(i<selectrounds){
       dih <- dih[,colnames(dih)!=as.character(imp[1,1])]
-      if(is.numeric(dih)){
+      if(is.null(dim(dih))){
         dih <- as.matrix(dih)
         colnames(dih) <- as.character(imp[1,1])
       }
