@@ -142,7 +142,7 @@ feature.selection <- function(output_dir = "/featureSelection",
       dih <- dih[,colnames(dih)!=as.character(imp[1,1])]
       if(is.null(dim(dih))){
         dih <- as.matrix(dih)
-        colnames(dih) <- as.character(imp[1,1])
+        colnames(dih) <- as.character(imp[2,1])
       }
       train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
       if(file.exists("data/test.index")) {
