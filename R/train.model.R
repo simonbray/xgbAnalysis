@@ -11,14 +11,17 @@
 #' @importFrom data.table fread
 #' @export
 
-train.model <- function(data_dir, output_dir, params, num_class, nrounds = 20) {
+train.model <- function(data_dir, output_dir, params=NA, nrounds = 20) {
 
   # check if output dir exists and create it if not
   if(!dir.exists(output_dir)) {
     message(paste("Creating output directory", output_dir))
     dir.create(output_dir, showWarnings = F, recursive = T)
   }
-
+  if(is.na(params)){
+    fread("parameter")
+  }
+  
   # read train and test data
   message("Reading training and test data ...")
   train.matrix <- xgb.DMatrix(paste(data_dir, "train.xgb.Dmatrix", sep="/"))
