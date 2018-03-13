@@ -3,7 +3,7 @@ Title: Reaction coordinates analysis
 Version: 0.0.0.9000
 Authors@R: person("Simon", "Brandt", email = "simonbrandt@protonmail.com", role = c("aut", "cre"))
 Description: Finding reaction coordinates from molecular dynamics simulations with machine learning algorithm xgboost.
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.3.3)
 License: MIT
 Encoding: UTF-8
 LazyData: true
