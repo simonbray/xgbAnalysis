@@ -82,12 +82,12 @@ feature.selection <- function(output_dir = "/featureSelection",
   sts <- sts-matrix(data=1, nrow=nrow(sts)) #for xgboost multi:softprobe (states must begin from 0)
 
   #split train data
-  train.index <- fread("train.index", header = F)$V1
+  train.index <- fread("data/train.index", header = F)$V1
   train.matrix <- xgb.DMatrix(data = dih[train.index,], label = sts[train.index,])
 
   #split test data
-  if(file.exists("test.index")) {
-    test.index <- fread("test.index", header = F)$V1
+  if(file.exists("data/test.index")) {
+    test.index <- fread("data/test.index", header = F)$V1
     test.matrix <- xgb.DMatrix(data = dih[test.index,], label = sts[test.index,])
     test.label <- sts[test.index]
     watchlist <- c(train = train.matrix, test = test.matrix)
@@ -145,7 +145,7 @@ feature.selection <- function(output_dir = "/featureSelection",
         colnames(dih) <- as.character(imp[1,1])
       }
       train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
-      if(file.exists("test.index")) {
+      if(file.exists("data/test.index")) {
         test.matrix <- xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,])
         watchlist <- list(train = train.matrix, test = test.matrix)
       } else {
