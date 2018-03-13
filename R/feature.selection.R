@@ -39,9 +39,9 @@ feature.selection <- function(output_dir = "/featureSelection",
   # check.import.parameter()
 
   prm <- fread(impdata)
-  crd <- prm$crd
-  sts <- prm$sts
-  label <- prm$label
+  crd <- prm$coords
+  sts <- prm$states
+  label <- prm$labels
 
   # if(decreasing){
   #  output_dir <- "/feature.selection/decreasing"
