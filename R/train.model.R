@@ -19,7 +19,7 @@ train.model <- function(data_dir, output_dir, params=NA, nrounds = 20) {
     dir.create(output_dir, showWarnings = F, recursive = T)
   }
   if(is.na(params)){
-    fread("parameter")
+    params <- fread("parameter")
   }
   
   # read train and test data
