@@ -19,9 +19,9 @@ train.model <- function(data_dir, output_dir, params=NA, nrounds = 20) {
     dir.create(output_dir, showWarnings = F, recursive = T)
   }
   if(is.na(params)){
-    params <- fread("parameter")
+    params <- fread("data/train.parameter")
   }
-  
+
   # read train and test data
   message("Reading training and test data ...")
   train.matrix <- xgb.DMatrix(paste(data_dir, "train.xgb.Dmatrix", sep="/"))
