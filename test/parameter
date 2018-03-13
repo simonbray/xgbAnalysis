@@ -1,2 +1,0 @@
-objective,num_class,eta,gamma,max_depth,min_child_weight,subsample,colsample_bytree,eval_metric,nthread
-multi:softmax,2,0.3,0,6,1,1,1,merror,0
