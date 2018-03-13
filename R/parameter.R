@@ -46,7 +46,7 @@ set.parameter <- function(output_dir, input_params=NA, parameter=list())  {
     }
   }
 
-  fwrite(defaultParams, paste(output_dir, "parameter", sep = "/"))
+  fwrite(defaultParams, paste(output_dir, "train_parameter", sep = "/"))
 }
 
 #' Get parameter.
