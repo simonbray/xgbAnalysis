@@ -8,9 +8,14 @@
 #' @export
  
 order.importance <- function(M,
+                             sts = NA,
                              decreasing = F)  {
   #get state population
-  pop <- table(fread(fread("import.data.parameter")$sts, showProgress = F))
+  if(is.na(sts))  {
+    pop <- table(fread(fread("import.data.parameter")$sts, showProgress = F))
+  }else{
+    pop <- table(fread(sts, showProgress = F)$V1)
+  }
   
   #normalize
   pop <- pop/max(pop)

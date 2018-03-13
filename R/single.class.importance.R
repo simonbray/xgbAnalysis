@@ -7,6 +7,7 @@
 #' @param feature_names_fn name of the file storing the feature names
 #'  (see \link{import.data})
 #' @param x class for which importance should be calculated
+#' @param label path to feature names
 #' @import xgboost
 #' @importFrom data.table fread
 #' @export
@@ -15,6 +16,9 @@ single.class.importance <- function(model_fn, feature_names_fn, x)  {
 
   bst <- xgb.load(model_fn)
   label <- fread(feature_names_fn, header = F)$V1
+  if(substr(label[1],1,1)=="#"){
+    label <- label[-1]
+  }
 
   dt <- xgb.model.dt.tree(label, bst)
   num.class <- get.parameter("num_class")
