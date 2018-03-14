@@ -3,13 +3,13 @@ title: "xgbAnalysis"
 output: html_notebook
 ---
   
-#Analysis of Protein Dynamics: xgbAnalysis Tutorial
+# Analysis of Protein Dynamics: xgbAnalysis Tutorial
 
-##Introduction
+## Introduction
 
 The xgbAnalysis package is a tool to find suitable reaction coordinates of biomolecular systems, e.g. proteins, using the [XGBoost](https://arxiv.org/pdf/1603.02754.pdf) algorithm that can be found on [github](https://github.com/dmlc/xgboost). Given a trajectory from a molecular dynamics simulation and suitable corresponding states, it evaluates, which of the input coordinates describe the system best, resulting in a low dimensional reaction coordinate of directly interpretable original coordinates. To obtain states for a given trajectorie the [prodyna](https://github.com/lettis/prodyna/blob/master/vignettes/prodynaTutorial.Rmd) package can be used.
 
-##Installation
+## Installation
 
 Install the [xgbAnalysis](https://github.com/sbbrandt/xgbAnalysis) package, using the R-devtools package
   
@@ -21,7 +21,7 @@ devtools::install_github("sbbrandt/xgbAnalysis")
 library(xgbAnalysis)
 ```
 
-##Available test data
+## Available test data
 
 To this end internal data of HP-35 with every 100th frame for a quick testrun:
 
@@ -33,7 +33,7 @@ Including test files:
   
   * states obtained from maxgap shifted density based clustering `macrostates_every100`
 
-##Parameter
+## Parameter
 
 You can find an introduction to boosted decision trees [here](http://xgboost.readthedocs.io/en/latest/model.html).
 
@@ -49,8 +49,8 @@ While XGBoost has many parameter to define, how the decision trees are build, th
   
 When training a model to precisely predict states for unseen data, a good parameter choice is crucial. For the feature analysis however, the parameter choice is not that important, as the XGBoost algorithm is strong against overfitting and comes with a good default choice of training parameter. Here, it is most important, that the build model is "complex" enough with enough training rounds (`nrounds`) of trees that are not too small (`max_depth`), so that enough features (coordinates) are used in the evaluation process for split candidates in the split nodes. Usually the default parameter suit that requirement.
 
-##Analysis
-###Set Up Working Directory and Import Data
+## Analysis
+### Set Up Working Directory and Import Data
 
 In a first step the trajectory and states will be separated into a training set `trainsplit = 0.7 => 70%` and a test set.
 
@@ -80,7 +80,7 @@ This will create the ouput directory, here `data`, containing the following file
   
   * `test.xgb.Dmatrix` the test set in the XGBoost dense matrix format.
 
-###Train a Model
+### Train a Model
 
 To simply train a model that predicts the corresponding states of the trajectory with the default parameter and 2 training rounds, use
 
@@ -101,7 +101,7 @@ This will produce the following files in the output directory
   
   * `importance` with the feature importance from the training process.
 
-###Feature Selection
+### Feature Selection
 
 TODO description
 
@@ -161,7 +161,7 @@ plt.feature.selection(dir      = "./featureSelection_decreasing",
                       saveplot = F)
 ```
 
-###Single Class Importance
+### Single Class Importance
 
 Given a trained model, the feature importance for every state can be obtained. Here, for every single state, the individual importanec of all coordinates for that state is calculated and normalized, so that the importance of coordinates for one state add up to 1. The results are shown in a plot that can either be obtained setting a minimum importance, a coordinate has to contribute for at least one state or the number of coordinates that should be shown. Hence, setting the minimum importance to `colmin = 0` results in a plot showing all coordinates and setting the number of coordinates to `nfeatures = 6` results in a plot showing the 6 most important coordinates.
 
