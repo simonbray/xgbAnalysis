@@ -1,17 +1,17 @@
 #' confusion map
-#' 
+#'
 #' makes a confusion matrix and plot for missclassification
-#' 
+#'
 #' @param dir output directory
 #' @param pred prediction file
 #' @param average NA, 'label' or 'prediction'. Default = NA
 #' @param noDiagonal should diagonal not be plotted for better visibility of missclassification? default = T
-#' @import data.table
+#' @importFrom data.table fread
 #' @import ggplot2
-#' @import caret
-#' @import plotly
-#' @import dplyr
-#' @example 
+#' @importFrom caret confusionMatrix
+# @import plotly
+# @import dplyr
+#' @example
 #' confusion.map(dir = "/confusionMap", pred = "model/prediction", average = 'prediction', noDiagonal = F)
 #' @export
 
@@ -19,7 +19,7 @@ confusion.map <- function(dir = "/confusionMap",
                           pred,
                           average = NULL,
                           noDiagonal = T) {
-  
+
   savename <- "cunfusion.map"
   dir.create(dirname(dir))
   test.index <- fread("test.index", header = F)$V1
@@ -28,12 +28,12 @@ confusion.map <- function(dir = "/confusionMap",
   pred <- 1 + fread(pred)$V1 #xgboost prediction starts with 0
   num.class <- max(sts)
   label <- 1:num.class
-  
+
   #make confusion matrix
   cm <- confusionMatrix(pred, sts)
   cm <- cm$table
   write.table(cm, paste(dir, "confusion.matrix", sep = "/"), row.names = F, col.names = F)
-  
+
   #make average of predicted values
   if(average == "label"){
     for(i in 1:num.class){
@@ -74,11 +74,11 @@ confusion.map <- function(dir = "/confusionMap",
                          direction = 1) +
     guides(fill = guide_colorbar(barheight = pdim, barwidth = pdim/10)) +
     scale_x_continuous(breaks=1:num.class-1,
-                       labels = label, 
+                       labels = label,
                        expand=c(0,0)) +
-    scale_y_continuous(breaks=1:num.class-1, 
-                       labels = label, 
+    scale_y_continuous(breaks=1:num.class-1,
+                       labels = label,
                        expand = c(0,0))
   ggsave(paste(dir, "/", savename, ".png", sep = ""), p, width = pdim, height = pdim)
-  
+
 }

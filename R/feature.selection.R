@@ -18,7 +18,7 @@
 #' Trains iteratively a xgb model while dismissing features by importance and monitoring accuracy.
 #' Decreasing will dismiss the most important feature each round, increasing (default) the least important.
 #' The file 'feature.importance' will contain an ordered list of all dismissed features. The param
-#' Additionally, in savemode = T, the following files will be created each round \italic{i}:
+#' Additionally, in savemode = T, the following files will be created each round i:
 #' \itemize{
 #'   \item roundi.model, where the trained model is saved.
 #'   \item roundi.prediction, where the predictions are saved.
