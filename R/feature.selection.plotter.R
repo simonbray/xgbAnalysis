@@ -43,8 +43,8 @@ plt.feature.selection <- function(dir = "featureSelection",
   color <- c(1, colorRampPalette(brewer.pal(12, "Paired"))(num.class))
 
   p <- ggplot(melt(M, id.vars = "round")) +
-    geom_point(aes(round, value, color = variable, size = variable), shape = 4) +
-    geom_line(aes(round, value, color = variable)) +
+    geom_point(aes(round, value, color = variable), size = 3, shape = 4) +
+    geom_line(aes(round, value, color = variable), size = 3) +
     scale_size_manual(values = c(0,rep(pdim/5, num.class))) +
     scale_color_manual(values = color) +
     theme_bw(base_size = pdim*3) +
@@ -76,8 +76,10 @@ plt.feature.selection <- function(dir = "featureSelection",
     p <- p + coord_cartesian(ylim = ylim)
   }
   if(!is.na(xlim[1]) | !is.na(ylim[1]) & saveplot) {
-    ggsave(filename = paste(dir, "/plot/", pre, "zoom.png", sep = ""),
-           p, width = pdim*width, height = pdim)
+    if(saveplot){
+      ggsave(filename = paste(dir, "/plot/", pre, "zoom.png", sep = ""),
+             p, width = pdim*width, height = pdim)
+    }
   }
   if(!saveplot){
     return(p)

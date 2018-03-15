@@ -4,7 +4,7 @@
 #'
 #' @param M importance matrix of model
 #' @param decreasing if FALSE (default) least important feature is on top
-#' @import data.table
+#' @importFrom data.table fread
 #' @export
 
 order.importance <- function(M,

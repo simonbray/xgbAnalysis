@@ -103,6 +103,7 @@ feature.selection <- function(output_dir = "/featureSelection",
 
   for(i in 0:selectrounds) {
     ##xgboost
+    message(paste("selectround ", i, ": start training model..." ,sep = ""))
     bst <- xgb.train(data = train.matrix,
                      watchlist = watchlist,
                      eval_metric = 'merror',
@@ -112,6 +113,7 @@ feature.selection <- function(output_dir = "/featureSelection",
                      nrounds = nrounds,
                      max_depth = max_depth,
                      nthread = nthread)
+    message("ready...")
     M[i+1,1] <- i
     pred <- predict(bst, test.matrix)
     M[i+1, 3] <- round(sum(pred == test.label)/(length(pred)), 4)
@@ -133,7 +135,9 @@ feature.selection <- function(output_dir = "/featureSelection",
     }
     M[i+1,2] <- as.character(imp[1,1])
     write.table(M, paste(output_dir, "/feature.selection", sep = ""), row.names = F)
+    message(paste("selectround ", i, ": ", as.character(imp[1,1]), " dismissed from data set..." ,sep = ""))
     if(savemode)  {
+      message(paste("selectround ", i, ": save model and stats..." ,sep = ""))
       xgb.save(bst, paste(output_dir, "/selectround", i, ".model", sep=""))
       write.table(imp, file = paste(output_dir, "/selectround", i, ".importance", sep = ""))
       write.table(cbind("prediction" = pred), file = paste(output_dir, "/selectround", i, ".prediction", sep = ""), row.names = F, col.names = F)

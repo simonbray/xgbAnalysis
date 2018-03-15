@@ -77,15 +77,15 @@ import.data <- function(output_dir, coords, states, labels, trainsplit) {
   colnames(states) <- c("states")
 
   #all data
-  all.matrix <- xgb.DMatrix(data = dih, label = states)
-  xgb.DMatrix.save(all.matrix,
-                   paste(output_dir, "all.xgb.Dmatrix", sep="/"))
+  # all.matrix <- xgb.DMatrix(data = dih, label = states)
+  # xgb.DMatrix.save(xgb.DMatrix(data = dih, label = states),
+  #                  paste(output_dir, "all.xgb.Dmatrix", sep="/"))
 
   #split train data
   train.index  <- sample(1:nrow(dih), nrow(dih)*trainsplit)
-  train.matrix <- xgb.DMatrix(data = dih[train.index,], label = states[train.index,])
+  # train.matrix <- xgb.DMatrix(data = dih[train.index,], label = states[train.index,])
 
-  xgb.DMatrix.save(train.matrix,
+  xgb.DMatrix.save(xgb.DMatrix(data = dih[train.index,], label = states[train.index,]),
                    paste(output_dir,"train.xgb.Dmatrix", sep="/"))
   write.table(train.index,
               paste(output_dir, "train.index", sep="/"),
@@ -94,13 +94,13 @@ import.data <- function(output_dir, coords, states, labels, trainsplit) {
   #split test data
   if(trainsplit < 1){
     test.index  <- c(1:nrow(dih))[-train.index]
-    test.matrix <- xgb.DMatrix(data = dih[test.index,], label = states[test.index,])
+    # test.matrix <- xgb.DMatrix(data = dih[test.index,], label = states[test.index,])
 
-    xgb.DMatrix.save(test.matrix,
+    xgb.DMatrix.save(xgb.DMatrix(data = dih[test.index,], label = states[test.index,]),
                      paste(output_dir, "test.xgb.Dmatrix", sep="/"))
     write.table(test.index,
                 paste(output_dir, "test.index", sep="/"),
                 row.names = F, col.names = F)
   }
-  return(list(num_class=num.class))
+  # return(list(num_class=num.class))
 }

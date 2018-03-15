@@ -9,7 +9,7 @@
 #' @param pdim plot dimension (height = pdim)
 #' @param width plot width (pdim*width)
 #' @import ggplot2
-#' @import data.table
+#' @importFrom data.table fread
 #' @export
 
 plt.single.class.importance <- function(pre = "singleClassImportance/sci",
