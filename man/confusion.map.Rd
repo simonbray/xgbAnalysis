@@ -4,10 +4,11 @@
 \alias{confusion.map}
 \title{confusion map}
 \usage{
-confusion.map(dir = "/confusionMap", pred, average = NULL, noDiagonal = T)
+confusion.map(output_dir = "./confusionMap", impdata = "./data", pred,
+  average = NULL, noDiagonal = T, pdim = 10, width = 1.5)
 }
 \arguments{
-\item{dir}{output directory}
+\item{output_dir}{output directory}
 
 \item{pred}{prediction file}
 

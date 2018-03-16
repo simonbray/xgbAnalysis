@@ -18,9 +18,6 @@ import.data(output_dir, coords, states, labels, trainsplit)
 \item{trainsplit}{Numeric, fraction of the data that should be used for
 training, in [0,1]}
 }
-\value{
-named list with elements: num_class
-}
 \description{
 Reads the files \code{coords}, \code{states} and \code{labels} as coordinates,
 states and labels. The labels represent the column names of the coordinates
@@ -28,7 +25,6 @@ and the states should match the rows of the coordinates. The data then is
 separated in a training and a test set and saved in the xgboost matrix format.
 The following files are created:
 \itemize{
-  \item all.xgb.Dmatrix, where the whole data set is saved.
   \item train.xgb.Dmatrix, where the training set is saved.
   \item test.xgb.Dmatrix, where the test set is saved.
   \item train.index, where the train indix are saved.

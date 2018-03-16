@@ -4,26 +4,28 @@
 \alias{feature.selection}
 \title{Feature Selection.}
 \usage{
-feature.selection(output_dir = "/featureSelection",
-  impdata = "data/import.data.parameter", decreasing = F, eta = 0.3,
-  max_depth = 6, nrounds = 20, nthread = 0, savemode = T)
+feature.selection(output_dir = "./featureSelection", data = "./data",
+  decreasing = F, ndismiss = NA, nrounds = 20, nthread = 0, eta = NA,
+  max_depth = NA, savemode = T)
 }
 \arguments{
 \item{output_dir}{output directory}
 
-\item{impdata}{file to import data parameter}
-
 \item{decreasing}{decreasing = F :least important feature will be dismissed}
 
-\item{eta}{TODO}
+\item{ndismiss}{how many features (coordinates) should be dismissed? Use just when \code{decreasing=TRUE}.}
 
-\item{max_depth}{TODO}
-
-\item{nrounds}{TODO}
+\item{nrounds}{XGBoost parameter: training rounds}
 
 \item{nthread}{0 for all}
 
+\item{eta}{XGBoost parameter: learning rate}
+
+\item{max_depth}{XGBoost parameter: maximum tree depth}
+
 \item{savemode}{save xgb models (T/F)}
+
+\item{impdata}{file to import data parameter}
 }
 \description{
 Dismisses features iteratively by their importance and monitor classification
@@ -36,8 +38,8 @@ The parameter values used for feature selection are written to the file
 'parameter'.
 Additionally, in savemode = T, the following files will be created each round i:
 \itemize{
-  \item roundi.model, where the trained model is saved.
-  \item roundi.prediction, where the predictions are saved.
-  \item roundi.importance, where the feature importanec is saved.
+  \item round<i>.model, where the trained model is saved.
+  \item round<i>.prediction, where the predictions are saved.
+  \item round<i>.importance, where the feature importanec is saved.
 }
 }
