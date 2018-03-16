@@ -18,7 +18,7 @@
 #' @param output_dir Character, name of the output directory.
 #' @param coords Character, name of the coordinates file
 #' @param states Character, name of the states file
-#' @param label Character, filename or 'dihedrals' to get Phi2, Psi2, Phi3, ...
+#' @param labels Character, filename or 'dihedrals' to get Phi2, Psi2, Phi3, ...
 #' @param trainsplit Numeric, fraction of the data that should be used for
 #'  training, in [0,1]
 #' @importFrom data.table fread

@@ -7,11 +7,15 @@
 train.model(data_dir, output_dir, params = NA, nrounds = 20)
 }
 \arguments{
-\item{nrounds}{TODO why is this not taken from parameter file}
+\item{data_dir}{directory containing the files train.parameter,
+feature.names, train.xgb.Dmatrix, test.xgb.Dmatrix (see \link{\code{import.data}})}
 
-\item{num_class}{TODO why is this not taken from parameter file}
+\item{output_dir}{directory to which results are written}
+
+\item{nrounds}{number of training rounds}
 }
 \description{
 TODO: detailed description.
 TODO: Parameter, test.matrix (?)
+TODO: data_dir
 }

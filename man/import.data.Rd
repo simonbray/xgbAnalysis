@@ -13,10 +13,10 @@ import.data(output_dir, coords, states, labels, trainsplit)
 
 \item{states}{Character, name of the states file}
 
+\item{labels}{Character, filename or 'dihedrals' to get Phi2, Psi2, Phi3, ...}
+
 \item{trainsplit}{Numeric, fraction of the data that should be used for
 training, in [0,1]}
-
-\item{label}{Character, filename or 'dihedrals' to get Phi2, Psi2, Phi3, ...}
 }
 \value{
 named list with elements: num_class

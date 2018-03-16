@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature.selection.R
 \name{feature.selection}
 \alias{feature.selection}
-\title{accuracy loss data}
+\title{Feature Selection.}
 \usage{
 feature.selection(output_dir = "/featureSelection",
   impdata = "data/import.data.parameter", decreasing = F, eta = 0.3,
@@ -15,18 +15,26 @@ feature.selection(output_dir = "/featureSelection",
 
 \item{decreasing}{decreasing = F :least important feature will be dismissed}
 
+\item{eta}{TODO}
+
+\item{max_depth}{TODO}
+
+\item{nrounds}{TODO}
+
 \item{nthread}{0 for all}
 
 \item{savemode}{save xgb models (T/F)}
 }
 \description{
-dismisses features iteratively by importance and monitors accuracy
-}
-\details{
-Trains iteratively a xgb model while dismissing features by importance and monitoring accuracy.
-Decreasing will dismiss the most important feature each round, increasing (default) the least important.
-The file 'feature.importance' will contain an ordered list of all dismissed features. The param
-Additionally, in savemode = T, the following files will be created each round \italic{i}:
+Dismisses features iteratively by their importance and monitor classification
+accuracy. \cr
+Trains iteratively a xgb model while dismissing features by importance and
+monitoring accuracy. Decreasing will dismiss the most important feature each
+round, increasing (default) the least important. The file 'feature.importance'
+will contain an ordered list of all dismissed features. \cr
+The parameter values used for feature selection are written to the file
+'parameter'.
+Additionally, in savemode = T, the following files will be created each round i:
 \itemize{
   \item roundi.model, where the trained model is saved.
   \item roundi.prediction, where the predictions are saved.

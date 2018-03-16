@@ -1,8 +1,12 @@
-#' single class importance plotter
+#' Single class importance plot
 #'
-#' plots importance from single.class.importance
+#' Plot the feature importance per state. Feature importance is normalized. \cr
+#' Specify \code{colmin} to obtain a plot containing all coordinates with
+#' a feature importance larger than this minimum importance. \cr
+#' Specify \code{nfeatures} to obtain a plot containing the n most important
+#' coordinates.
+#' TODO update parameter descriptions
 #'
-# @param savefolder
 #' @param model directory to xgb.model file. If NA (default) model from ./model/xgb.model is taken.
 #' @param colmin Sets minimum of imnportance a feature has to contribute to at least one class. Can be set as vector to produce multiple plots: colmin = c(0.1,0.2,0.3)
 #' @param nfeatures Returns plot with 'nfeatures' most important features. Can be set as vector to produce multiple plots: c(4,5,6)

@@ -2,11 +2,12 @@
 #'
 #' TODO: detailed description.
 #' TODO: Parameter, test.matrix (?)
+#' TODO: data_dir
 #'
-#' @param data_dir
-#' @param output_dir
-#' @param num_class TODO why is this not taken from parameter file
-#' @param nrounds TODO why is this not taken from parameter file
+#' @param data_dir directory containing the files train.parameter,
+#' feature.names, train.xgb.Dmatrix, test.xgb.Dmatrix (see \link{\code{import.data}})
+#' @param output_dir directory to which results are written
+#' @param nrounds number of training rounds
 #' @import xgboost
 #' @importFrom data.table fread
 #' @export
@@ -19,7 +20,7 @@ train.model <- function(data_dir, output_dir, params=NA, nrounds = 20) {
     dir.create(output_dir, showWarnings = F, recursive = T)
   }
   if(is.na(params)){
-    params <- fread("data/train.parameter")
+    params <- fread(paste(data_dir, "train.parameter", sep="/"))
   }
 
   # read train and test data

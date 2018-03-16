@@ -2,7 +2,7 @@
 % Please edit documentation in R/plt.single.class.importance.R
 \name{plt.single.class.importance}
 \alias{plt.single.class.importance}
-\title{single class importance plotter}
+\title{Single class importance plot}
 \usage{
 plt.single.class.importance(pre = "singleClassImportance/sci", model = NA,
   names = NA, colmin = NA, nfeatures = NA, pdim = 10, width = 1)
@@ -19,5 +19,10 @@ plt.single.class.importance(pre = "singleClassImportance/sci", model = NA,
 \item{width}{plot width (pdim*width)}
 }
 \description{
-plots importance from single.class.importance
+Plot the feature importance per state. Feature importance is normalized. \cr
+Specify \code{colmin} to obtain a plot containing all coordinates with
+a feature importance larger than this minimum importance. \cr
+Specify \code{nfeatures} to obtain a plot containing the n most important
+coordinates.
+TODO update parameter descriptions
 }

@@ -55,6 +55,7 @@ When training a model to precisely predict states for unseen data, a good parame
 In a first step the trajectory and states will be separated into a training set `trainsplit = 0.7 => 70%` and a test set.
 
 ```{r}
+getwd()
 import.data(output_dir = "./data", 
             coords     = "villin_360K_every100.dih", 
             states     = "macrostates_every100",
@@ -87,11 +88,11 @@ To simply train a model that predicts the corresponding states of the trajectory
 ```{r}
 train.model(data_dir   = "./data",
             output_dir = "./model",
-            nrounds    = 2
+            nrounds    = 5
             )
 ```
 
-As the data set is small and the number of training rounds is small, the accuracy will not be good. For better accuracy, try using `nrounds = 20` training rounds for which the comutation time will be 10x larger.
+As the data set is small and the number of training rounds is small, the accuracy will not be good. For better accuracy, try using `nrounds = 20` training rounds for which the computation time will be 10x larger.
 
 This will produce the following files in the output directory
 
@@ -120,19 +121,19 @@ This will produce the following files in the ouput directory
 
   * `feature.selection` containing the list of features that are dismissed, the overall accuracy and the accuracy for every state for every iteration round.
   
-  * `parameter` containing the parameter given to the function.
+  * `parameter` containing the parameter values used for feature selection.
 
 If `savemode = TRUE` the following files will be produced every iteration round
   
-  * `selectround0.importance` containing the feature importance of the iteration round.
+  * `selectround<n>.importance` containing the feature importance of the iteration round.
   
-  * `selectround0.model` the trained model.
+  * `selectround<n>.model` the trained model.
   
-  * `selectround0.prediction` with the state prediction made by the model of this iteration.
+  * `selectround<n>.prediction` with the state prediction made by the model of this iteration.
   
-The `selectround` index gives the number of coordinates (features) that are dismissed. In round 0, the model is trained with all coordinates and in round 1 the most/least important coordinate from round 0 has been removed from the data set. Given 66 dihedral angles for HP-35, at selectround 65 the model is trained using just the last remaining coordinate.
+The index `n` gives the number of coordinates (features) that are dismissed. In round 0, the model is trained with all coordinates and in round 1 the most/least important coordinate from round 0 has been removed from the data set. Given 66 dihedral angles for HP-35, at selectround 65 the model is trained using just the last remaining coordinate.
 
-The prediction accuracy can be plotted in dependency of the number of dismissed coordinates (features)
+The prediction accuracy can be plotted in dependency of the number of dismissed coordinates (features).
 
 ```{r}
 plt.feature.selection(dir      = "./featureSelection",
@@ -154,7 +155,7 @@ feature.selection(output_dir = "./featureSelection_decreasing",
                   savemode   = T)
 ```
 
-plot feature selection decreasing
+Plot the feature selection decreasing
 
 ```{r}
 plt.feature.selection(dir      = "./featureSelection_decreasing",
@@ -163,7 +164,7 @@ plt.feature.selection(dir      = "./featureSelection_decreasing",
 
 ### Single Class Importance
 
-Given a trained model, the feature importance for every state can be obtained. Here, for every single state, the individual importanec of all coordinates for that state is calculated and normalized, so that the importance of coordinates for one state add up to 1. The results are shown in a plot that can either be obtained setting a minimum importance, a coordinate has to contribute for at least one state or the number of coordinates that should be shown. Hence, setting the minimum importance to `colmin = 0` results in a plot showing all coordinates and setting the number of coordinates to `nfeatures = 6` results in a plot showing the 6 most important coordinates.
+Given a trained model, the feature importance for every state can be obtained. Here, for every single state, the individual importance of all coordinates for that state is calculated and normalized, so that the importance of coordinates for one state add up to 1. The results are shown in a plot that can either be obtained setting a minimum importance, a coordinate has to contribute for at least one state or the number of coordinates that should be shown. Hence, setting the minimum importance to `colmin = 0` results in a plot showing all coordinates and setting the number of coordinates to `nfeatures = 6` results in a plot showing the 6 most important coordinates.
 
 ```{r}
 plt.single.class.importance(pre    = "./singleClassImportance/sci",

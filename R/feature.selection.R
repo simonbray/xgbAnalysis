@@ -1,29 +1,32 @@
-#' accuracy loss data
+#' Feature Selection.
 #'
-#' dismisses features iteratively by importance and monitors accuracy
-#'
-#' @param output_dir output directory
-#' @param impdata file to import data parameter
-#' @param decreasing decreasing = F :least important feature will be dismissed
-#' @param eta
-#' @param nrounds
-#' @param max_depth
-#' @param nthread 0 for all
-#' @param savemode save xgb models (T/F)
-#' @import xgboost
-#' @import data.table
-#' @example
-#' feature.selection(output_dir = "/featureSelection", impdata = "data/import.data.parameter", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
-#' @details
-#' Trains iteratively a xgb model while dismissing features by importance and monitoring accuracy.
-#' Decreasing will dismiss the most important feature each round, increasing (default) the least important.
-#' The file 'feature.importance' will contain an ordered list of all dismissed features. The param
+#' Dismisses features iteratively by their importance and monitor classification
+#' accuracy. \cr
+#' Trains iteratively a xgb model while dismissing features by importance and
+#' monitoring accuracy. Decreasing will dismiss the most important feature each
+#' round, increasing (default) the least important. The file 'feature.importance'
+#' will contain an ordered list of all dismissed features. \cr
+#' The parameter values used for feature selection are written to the file
+#' 'parameter'.
 #' Additionally, in savemode = T, the following files will be created each round i:
 #' \itemize{
 #'   \item roundi.model, where the trained model is saved.
 #'   \item roundi.prediction, where the predictions are saved.
 #'   \item roundi.importance, where the feature importanec is saved.
 #' }
+#'
+#' @param output_dir output directory
+#' @param impdata file to import data parameter
+#' @param decreasing decreasing = F :least important feature will be dismissed
+#' @param eta TODO
+#' @param nrounds TODO
+#' @param max_depth TODO
+#' @param nthread 0 for all
+#' @param savemode save xgb models (T/F)
+#' @import xgboost
+#' @import data.table
+#' @example
+#' feature.selection(output_dir = "/featureSelection", impdata = "data/import.data.parameter", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
 #' @export
 #ToDo: exists testsplit:rearrange accuracy; set new parameter (eta,max_depth) or take from parameter file?
 

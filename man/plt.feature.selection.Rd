@@ -2,13 +2,13 @@
 % Please edit documentation in R/feature.selection.plotter.R
 \name{plt.feature.selection}
 \alias{plt.feature.selection}
-\title{plots accuracy loss from feature.selection}
+\title{Accuracy loss plot based on feature selection}
 \usage{
 plt.feature.selection(dir = "featureSelection", decreasing = F, pdim = 10,
   width = 1.5, saveplot = T, pre = "", xlim = NA, ylim = NA)
 }
 \arguments{
-\item{dir}{path of 'feature.selection' file. See function 'feature.selection'.}
+\item{dir}{path of 'feature.selection' file (see \link{\code{feature.selection}})}
 
 \item{pdim}{dimension of plot, default=10}
 
@@ -23,5 +23,5 @@ plt.feature.selection(dir = "featureSelection", decreasing = F, pdim = 10,
 \item{ylim}{zoom an y-axis, e.g. ylim = c(0,0.25). Use c() with other than natural numbers}
 }
 \description{
-plots accuracy while features are dismissed iteratively
+Plot the accuracy as a function of the number of dismissed features.
 }

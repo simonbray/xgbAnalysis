@@ -1,8 +1,8 @@
-#' plots accuracy loss from feature.selection
+#' Accuracy loss plot based on feature selection
 #'
-#' plots accuracy while features are dismissed iteratively
+#' Plot the accuracy as a function of the number of dismissed features.
 #'
-#' @param dir path of 'feature.selection' file. See function 'feature.selection'.
+#' @param dir path of 'feature.selection' file (see \link{\code{feature.selection}})
 #' @param pdim dimension of plot, default=10
 #' @param width proportion of width to height, default=1.5
 #' @param saveplot save plot?(T/F) default = T
