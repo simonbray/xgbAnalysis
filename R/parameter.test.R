@@ -10,10 +10,10 @@
 #' @import data.table
 #' @import ggplot2
 #' @import xgboost
-#' @example 
+#' @example
 #' parameter.test(nthread = 12, nrounds = 20, testpar = data.frame(eta = c(0.1, 0.5, 0.1, T), max_depth = c(3, 10, 1, T)))
 #' @export
-
+#TODO: dir; defpar--train.parameter
 parameter.test <- function(#savefolder,
                            nthread,
                            nrounds,
@@ -33,13 +33,13 @@ parameter.test <- function(#savefolder,
   train.matrix <- xgb.DMatrix("train.matrix.data")
   test.matrix <- xgb.DMatrix("test.matrix.data")
   watchlist <- c(train = train.matrix, test = test.matrix)
-  
-  dir.create("/partest")
-  dir <- "/partest"
-  
+
+  dir.create("partest")
+  dir <- "partest"
+
   #num.class <- get.num.class(train.matrix, test.matrix)
   defpar$num_class <- get.num.class(train.matrix, test.matrix)
-  
+
   #loop for every parameter
   for(i in 1:(dim(testpar)[2])){
     #load parameter name and values
@@ -49,7 +49,7 @@ parameter.test <- function(#savefolder,
     p3 <- testpar[3,i] #stepsize
     p4 <- testpar[4,i] #nrounds adjustment
     steps <- round((p2-p1)/p3)
-    
+
     #matrix for evaluation
     parm <- matrix(nrow = steps+1, ncol = 3)
     colnames(parm) <- c(pm, "nrounds", "accuracy")
@@ -66,19 +66,19 @@ parameter.test <- function(#savefolder,
         nrounds <- round(nrounds*p2/as.numeric(parm[j+1,1]))
       }
       bst <- xgb.train(data = train.matrix,
-                       watchlist = watchlist, 
+                       watchlist = watchlist,
                        params = params,
-                       nrounds = nrounds, 
+                       nrounds = nrounds,
                        nthread = nthread)
       #make prediction based on model
       pred <- predict(bst, test_data)
-      
+
       #save accuracy; rewrites file every round. one file per parameter
       parm[j+1,2] <- nrounds
       nrounds <- nroundsave
       parm[j+1,3] <- sum(pred == test_label)/(length(pred))
-      
-      
+
+
       write.csv(parm, file = paste(dir, "/partest_", pm, sep = ""))
     }
     #make plot if plot TRUE
@@ -86,12 +86,12 @@ parameter.test <- function(#savefolder,
       #make dataframe for ggplot
       parm <- as.data.frame(parm)
       #make plot
-      p <- ggplot(parm, aes(parm[,pm], y = value)) + 
+      p <- ggplot(parm, aes(parm[,pm], y = value)) +
         geom_point(aes(y = parm[,"accuracy"])) +
         geom_line(aes(y = parm[,"accuracy"])) +
         theme_bw(base_size = pdim*2) +
         labs(title = paste("Accuracy in dependency of", pm),
-             x= pm, 
+             x= pm,
              y="accuracy") +
         theme(plot.title = element_text(face = "bold.italic", hjust = 0.5),
               axis.title.x = element_text(face = "bold"),
@@ -101,13 +101,13 @@ parameter.test <- function(#savefolder,
         ) +
         scale_x_continuous(breaks=0:(steps)*p3)
       if(p4 == 1) {#info for adjusted nrounds for eta
-        p <- p + labs(subtitle = "iterations = nrounds*(max_value/current_value)") + 
+        p <- p + labs(subtitle = "iterations = nrounds*(max_value/current_value)") +
                 theme(plot.subtitle = element_text(size = pdim))
       }
       #save plot
       ggsave(filename = paste(dir, "/partest_", pm, ".png", sep = ""),
              p, width = pdim*width, height = pdim)
-      
+
     }
   }
 }

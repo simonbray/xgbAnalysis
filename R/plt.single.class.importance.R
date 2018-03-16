@@ -7,7 +7,10 @@
 #' coordinates.
 #' TODO update parameter descriptions
 #'
+#' @param pre prefix for saved plots
 #' @param model directory to xgb.model file. If NA (default) model from ./model/xgb.model is taken.
+#' @param names custom feature (coordinate) names file
+#' @param states custom states file (default=NA : states are numbered consecutively starting from 1)
 #' @param colmin Sets minimum of imnportance a feature has to contribute to at least one class. Can be set as vector to produce multiple plots: colmin = c(0.1,0.2,0.3)
 #' @param nfeatures Returns plot with 'nfeatures' most important features. Can be set as vector to produce multiple plots: c(4,5,6)
 #' @param pdim plot dimension (height = pdim)
@@ -16,13 +19,14 @@
 #' @importFrom data.table fread
 #' @export
 
-plt.single.class.importance <- function(pre = "singleClassImportance/sci",
-                                        model = NA,
-                                        names = NA,
-                                        colmin = NA,
+plt.single.class.importance <- function(pre       = "singleClassImportance/sci",
+                                        model     = NA,
+                                        names     = NA,
+                                        states    = NA,
+                                        colmin    = NA,
                                         nfeatures = NA,
-                                        pdim = 10,
-                                        width = 1)  {
+                                        pdim      = 10,
+                                        width     = 1)  {
 
   dir.create(dirname(pre), showWarnings = F)
   if(is.na(names))  {
@@ -39,7 +43,11 @@ plt.single.class.importance <- function(pre = "singleClassImportance/sci",
 
   #label <- rev(label)
   M <- matrix(0, ncol = num.class, nrow = length(label))
-  colnames(M) <- c(1:num.class)
+  if(!is.na(states)){
+    colnames(M) <- fread(states)$V1
+  } else {
+    colnames(M) <- c(1:num.class)
+  }
   rownames(M) <- rev(label)
 
   for(i in 1:num.class) {

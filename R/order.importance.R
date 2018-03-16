@@ -12,7 +12,7 @@ order.importance <- function(M,
                              decreasing = F)  {
   #get state population
   if(is.na(sts))  {
-    pop <- table(fread(fread("data/import.data.parameter")$states, showProgress = F))
+    pop <- table(fread(fread("./data/import.data.parameter")$states, showProgress = F))
   }else{
     pop <- table(fread(sts, showProgress = F)$V1)
   }

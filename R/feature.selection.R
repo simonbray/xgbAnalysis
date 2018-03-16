@@ -27,7 +27,7 @@
 #' @import xgboost
 #' @import data.table
 #' @example
-#' feature.selection(output_dir = "/featureSelection", impdata = "data/import.data.parameter", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
+#' feature.selection(output_dir = "/featureSelection", data = "data/import.data.parameter", decreasing = F, eta = 0.3, max_depth = 10, nrounds = 20, nthread = 12, savemode = T)
 #' @export
 #ToDo: exists testsplit:rearrange accuracy -> take testset for granted?!
 

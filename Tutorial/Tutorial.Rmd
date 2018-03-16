@@ -75,7 +75,7 @@ This will create the ouput directory, here `data`, containing the following file
   
   * `feature.names` with the names (`labels`) of the coordinates of the trajectory file.
   
-  * `all.xgb.Dmatrix` the whole data set in the XGBoost dense matrix format including the trajectory and the states.
+  <!-- * `all.xgb.Dmatrix` the whole data set in the XGBoost dense matrix format including the trajectory and the states. -->
   
   * `train.xgb.Dmatrix` the training set in the XGBoost dense matrix format.
   
@@ -88,7 +88,7 @@ To simply train a model that predicts the corresponding states of the trajectory
 ```{r}
 train.model(data_dir   = "./data",
             output_dir = "./model",
-            nrounds    = 5
+            nrounds    = 2
             )
 ```
 
@@ -164,7 +164,7 @@ plt.feature.selection(dir      = "./featureSelection_decreasing",
 
 ### Single Class Importance
 
-Given a trained model, the feature importance for every state can be obtained. Here, for every single state, the individual importance of all coordinates for that state is calculated and normalized, so that the importance of coordinates for one state add up to 1. The results are shown in a plot that can either be obtained setting a minimum importance, a coordinate has to contribute for at least one state or the number of coordinates that should be shown. Hence, setting the minimum importance to `colmin = 0` results in a plot showing all coordinates and setting the number of coordinates to `nfeatures = 6` results in a plot showing the 6 most important coordinates.
+Given a trained model, the feature importance for every state can be obtained. Here, for every single state, the individual importance of all coordinates for that state is calculated and normalized, so that the importance of coordinates for one state add up to 1. The results are shown in a plot that can either be obtained setting a minimum importance, a coordinate has to contribute for at least one state or the number of coordinates that should be shown. Hence, setting the minimum importance to `colmin = 0` results in a plot showing all coordinates and setting the number of coordinates to `nfeatures = 6` results in a plot showing the 6 most important coordinates, weighted by their population.
 
 ```{r}
 plt.single.class.importance(pre    = "./singleClassImportance/sci",

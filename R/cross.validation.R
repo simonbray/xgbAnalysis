@@ -1,13 +1,13 @@
 #' cross validation
-#' 
+#'
 #' calculates cross validation for given parameter
-#' 
+#'
 # @param savefolder
 #' @param nthread number of CPU cores to use, NA for all
 #' @param nfold how many folds of dataset
 #' @param nrounds number of training rounds
 #' @param defpar default parameter:default = list(eta=0.3, gamma=0, max_depth=6, min_child_weight=1, subsample=1, colsample_bytree=1)
-#' @param testparname 
+#' @param testparname
 #' @param testpar
 #' @param plot should results be plotted, default=TRUE
 #' @param pdim dimension of plot, default=10
@@ -16,7 +16,7 @@
 #' @import ggplot2
 #' @import xgboost
 #' @export
-#ToDo: pre, 
+#ToDo: pre, all.matrix.data needed
 
 cross.validation <- function(#savefolder,
                              pre = "",
@@ -33,12 +33,12 @@ cross.validation <- function(#savefolder,
   dir.create("cross.validation")
   all.matrix <- xgb.DMatrix("all.matrix.data")
   parameter <- as.list(fread("parameter"))
-  
+
   if(!is.na(testpar)) {
     parameter[testparname] <- testpar
   }
-  
-  
+
+
   cv_model <- xgb.cv(
     params = parameter,
     data = all.matrix,
@@ -54,13 +54,13 @@ cross.validation <- function(#savefolder,
          paste(pre, "cv.model_nrounds", nrounds, "_nfold", nfold, ".error", sep = ""),
          col.names = T,
          row.names = F)
-  
-  p <- ggplot(cv_model$evaluation_log, aes(cv_model$evaluation_log$iter, y = value, color = variable)) + 
-    geom_point(aes(y = cv_model$evaluation_log$test_merror_mean, col = "test-merror")) + 
+
+  p <- ggplot(cv_model$evaluation_log, aes(cv_model$evaluation_log$iter, y = value, color = variable)) +
+    geom_point(aes(y = cv_model$evaluation_log$test_merror_mean, col = "test-merror")) +
     geom_point(aes(y = cv_model$evaluation_log$train_merror_mean, col = "train-merror"))+
     theme_bw(base_size = pdim*2) +
     labs(title = "Cross Validation",
-         x="nround", 
+         x="nround",
          y="error") +
     theme(plot.title = element_text(face = "bold.italic", hjust = 0.5),
           axis.title.x = element_text(face = "bold"),
@@ -73,7 +73,7 @@ cross.validation <- function(#savefolder,
           legend.position = c(1, 1),
           legend.background = element_rect(colour = "black")
     )
-  
+
   ggsave(filename = paste(pre, "cv.model_nrounds", nrounds, "_nfold", nfold, ".png", sep = ""),
          p, width = pdim*width, height = pdim)
 }

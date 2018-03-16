@@ -12,7 +12,7 @@
 # @import plotly
 # @import dplyr
 #' @example
-#' confusion.map(dir = "/confusionMap", pred = "model/prediction", average = 'prediction', noDiagonal = F)
+#' confusion.map(output_dir = "./confusionMap", impdata = "./data", pred = "./model/prediction", average = 'prediction', noDiagonal = F)
 #' @export
 
 confusion.map <- function(output_dir = "./confusionMap",

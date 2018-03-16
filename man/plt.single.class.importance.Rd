@@ -5,10 +5,17 @@
 \title{Single class importance plot}
 \usage{
 plt.single.class.importance(pre = "singleClassImportance/sci", model = NA,
-  names = NA, colmin = NA, nfeatures = NA, pdim = 10, width = 1)
+  names = NA, states = NA, colmin = NA, nfeatures = NA, pdim = 10,
+  width = 1)
 }
 \arguments{
+\item{pre}{prefix for saved plots}
+
 \item{model}{directory to xgb.model file. If NA (default) model from ./model/xgb.model is taken.}
+
+\item{names}{custom feature (coordinate) names file}
+
+\item{states}{custom states file (default=NA : states are numbered consecutively starting from 1)}
 
 \item{colmin}{Sets minimum of imnportance a feature has to contribute to at least one class. Can be set as vector to produce multiple plots: colmin = c(0.1,0.2,0.3)}
 
