@@ -2,7 +2,7 @@
 #'
 #' makes a confusion matrix and plot for missclassification
 #'
-#' @param dir output directory
+#' @param output_dir output directory
 #' @param pred prediction file
 #' @param average NA, 'label' or 'prediction'. Default = NA
 #' @param noDiagonal should diagonal not be plotted for better visibility of missclassification? default = T
@@ -15,27 +15,32 @@
 #' confusion.map(dir = "/confusionMap", pred = "model/prediction", average = 'prediction', noDiagonal = F)
 #' @export
 
-confusion.map <- function(dir = "/confusionMap",
+confusion.map <- function(output_dir = "./confusionMap",
+                          impdata    = "./data",
                           pred,
-                          average = NULL,
-                          noDiagonal = T) {
+                          average    = NULL,
+                          noDiagonal = T,
+                          pdim       = 10,
+                          width      = 1.5) {
 
   savename <- "cunfusion.map"
-  dir.create(dirname(dir))
-  test.index <- fread("test.index", header = F)$V1
-  prm <- fread("import.data.parameter")
-  sts <- fread(prm$sts)$V1[test.index]
+  dir.create(output_dir)
+  test.index <- fread(paste(impdata, "test.index", sep = "/"), header = F)$V1
+  prm <- fread(paste(impdata, "import.data.parameter", sep = "/"))
+  sts <- fread(prm$states)$V1[test.index]
   pred <- 1 + fread(pred)$V1 #xgboost prediction starts with 0
-  num.class <- max(sts)
-  label <- 1:num.class
+  num.class <- dim(table(sts))
+  label <- as.numeric(names(table(sts))[1:num.class])
 
   #make confusion matrix
   cm <- confusionMatrix(pred, sts)
   cm <- cm$table
-  write.table(cm, paste(dir, "confusion.matrix", sep = "/"), row.names = F, col.names = F)
+  write.table(cm, paste(output_dir, "confusion.matrix", sep = "/"), row.names = F, col.names = F)
 
   #make average of predicted values
-  if(average == "label"){
+  if(is.null(average)){
+    message("plot will not be normalized")
+    }else if(average == "label"){
     for(i in 1:num.class){
       cm[i,] <- cm[i,]/sum(cm[i,])
     }
@@ -45,7 +50,7 @@ confusion.map <- function(dir = "/confusionMap",
       cm[,i] <- cm[,i]/sum(cm[,i])
     }
     savename <- paste(savename, average, sep = ".")
-  } else if(!is.null(average)){
+  } else {
     stop("average must be 'prediction'(=default), 'label' or NULL")
   }
   if(noDiagonal) {
@@ -79,6 +84,6 @@ confusion.map <- function(dir = "/confusionMap",
     scale_y_continuous(breaks=1:num.class-1,
                        labels = label,
                        expand = c(0,0))
-  ggsave(paste(dir, "/", savename, ".png", sep = ""), p, width = pdim, height = pdim)
+  ggsave(paste(output_dir, "/", savename, ".png", sep = ""), p, width = pdim, height = pdim)
 
 }
