@@ -33,7 +33,7 @@ plt.single.class.importance <- function(pre = "singleClassImportance/sci",
       label <- label[-1]
     }
   }
-  num.class <- get.parameter(params="data/train.parameter",
+  num.class <- get.parameter(params="./data/train.parameter",
                              parameter="num_class")
   impfeature = "Gain" #change if neccessary to 'Cover' or 'Frequency'
 

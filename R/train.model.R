@@ -42,8 +42,13 @@ train.model <- function(data_dir, output_dir, params=NA, nrounds = 20) {
   message("... finished.")
 
   # Save results, TODO: message(...) which files are stored where
+  message(paste("saving files to: ", output_dir, "...", sep = ""))
   xgb.save(bst, paste(output_dir, "xgb.model", sep="/"))
+  message("...xgb.model saved")
   xgb.dump(bst, paste(output_dir, "xgb.dump.model", sep="/"), with_stats = TRUE)
+  message("...xgb.dump.model saved")
   imp <- xgb.importance(model = bst, feature_names = label)
   write.csv(imp, paste(output_dir, "importance", sep="/"))
+  message("...importance saved")
+  message("...finished")
 }

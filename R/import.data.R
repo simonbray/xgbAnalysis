@@ -6,7 +6,7 @@
 #' separated in a training and a test set and saved in the xgboost matrix format.
 #' The following files are created:
 #' \itemize{
-#'   \item all.xgb.Dmatrix, where the whole data set is saved.
+#   \item all.xgb.Dmatrix, where the whole data set is saved.
 #'   \item train.xgb.Dmatrix, where the training set is saved.
 #'   \item test.xgb.Dmatrix, where the test set is saved.
 #'   \item train.index, where the train indix are saved.
@@ -23,12 +23,11 @@
 #'  training, in [0,1]
 #' @importFrom data.table fread
 #' @import xgboost
-#' @return named list with elements: num_class
+# @return named list with elements: num_class
 #' @examples
 #' import.data("./savefolder","./file.dih", "./macrostates", "./file.dih.names", 0.75)
 #' import.data("./savefolder", "./file.dih", "./macrostates", "dihedrals", 0.5)
 #' @export
-#ToDo: savename for save prefix?
 
 import.data <- function(output_dir, coords, states, labels, trainsplit) {
 
