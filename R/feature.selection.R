@@ -127,14 +127,14 @@ feature.selection <- function(output_dir = "./featureSelection",
   M <- as.data.frame(M)
   colnames(M) <- c("round", "feature dismissed", "accuracy", 1:num.class)
   if(!is.na(fdismissed[1])){
-    M[1,1:length(fdismissed)] <- 1:length(fdismissed)
-    M[2,1:length(fdismissed)] <- fdismissed
+    M[1:length(fdismissed),1] <- 1:length(fdismissed)
+    M[1:length(fdismissed),2] <- fdismissed
   }
 
   for(i in 0:selectrounds) {
     ##xgboost
-    if(!is.na(fdismissed[1])){
-      i <- length(fdismissed)-1
+    if(!is.na(fdismissed[1])&&i==0){
+      i <- length(fdismissed)
       message(paste("starting from selectround ", i, "...", sep = ""))
     }
     message(paste("selectround ", i, ": start training model..." ,sep = ""))
