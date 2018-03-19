@@ -127,8 +127,8 @@ feature.selection <- function(output_dir = "./featureSelection",
   M <- as.data.frame(M)
   colnames(M) <- c("round", "feature dismissed", "accuracy", 1:num.class)
   if(!is.na(fdismissed[1])){
-    M[2,1:length(fdmismissed)] <- fdismissed
-    M[1,1:length(fdmismissed)] <- 1:fdismissed
+    M[2,1:length(fdismissed)] <- fdismissed
+    M[1,1:length(fdismissed)] <- 1:fdismissed
   }
 
   for(i in 0:selectrounds) {
