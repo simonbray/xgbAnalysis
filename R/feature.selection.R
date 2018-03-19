@@ -99,7 +99,7 @@ feature.selection <- function(output_dir = "./featureSelection",
 
   if(!is.na(fdismissed)){
     dih <- dih[,-which(label %in% fdismissed)]
-    message(paste("the coordinates ", paste(fdimissed, collapse = " "), " have been removed from the training data...", sep = ""))
+    message(paste("the coordinates ", paste(fdismissed, collapse = " "), " have been removed from the training data...", sep = ""))
   }
 
   #split train data
