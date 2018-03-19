@@ -5,27 +5,29 @@
 \title{Feature Selection.}
 \usage{
 feature.selection(output_dir = "./featureSelection", data = "./data",
-  decreasing = F, ndismiss = NA, nrounds = 20, nthread = 0, eta = NA,
-  max_depth = NA, savemode = T)
+  decreasing = F, ndismiss = NA, fdimissed = NA, nrounds = 20,
+  nthread = 0, eta = NA, max_depth = NA, savemode = T)
 }
 \arguments{
 \item{output_dir}{output directory}
 
+\item{data}{path to data directory \link{\code{import.data}}}
+
 \item{decreasing}{decreasing = F :least important feature will be dismissed}
 
-\item{ndismiss}{how many features (coordinates) should be dismissed? Use just when \code{decreasing=TRUE}.}
+\item{ndismiss}{how many features (coordinates) should be dismissed? Use just when \code{decreasing=TRUE}}
 
 \item{nrounds}{XGBoost parameter: training rounds}
 
 \item{nthread}{0 for all}
 
-\item{eta}{XGBoost parameter: learning rate}
+\item{eta}{XGBoost parameter: learning rate; if NA, parameter from train.data file in data directory will be taken}
 
-\item{max_depth}{XGBoost parameter: maximum tree depth}
+\item{max_depth}{XGBoost parameter: maximum tree depth; if NA, parameter from train.data file in data directory will be taken}
 
 \item{savemode}{save xgb models (T/F)}
 
-\item{impdata}{file to import data parameter}
+\item{fdismissed}{coordinate names that should be dismissed, before starting to remove coordinates based on feature importance. E.g. fdismissed = c("Phi2","Psi10")}
 }
 \description{
 Dismisses features iteratively by their importance and monitor classification

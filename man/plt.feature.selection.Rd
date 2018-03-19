@@ -4,8 +4,8 @@
 \alias{plt.feature.selection}
 \title{Accuracy loss plot based on feature selection}
 \usage{
-plt.feature.selection(dir = "featureSelection", decreasing = F, pdim = 10,
-  width = 1.5, saveplot = T, pre = "", xlim = NA, ylim = NA)
+plt.feature.selection(dir = "featureSelection", pdim = 10, width = 1.5,
+  saveplot = T, pre = "", xlim = NA, ylim = NA)
 }
 \arguments{
 \item{dir}{path of 'feature.selection' file (see \link{\code{feature.selection}})}

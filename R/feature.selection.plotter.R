@@ -39,7 +39,7 @@ plt.feature.selection <- function(dir = "featureSelection",
   M <- M[,-2]
   colnames(M)[3:(num.class+2)] <- paste("State", 1:num.class)
   colnames(M)[2] <- "Accuracy"
-  color <- c(1, colorRampPalette(brewer.pal(12, "Dark2"))(num.class))#before: Paired
+  color <- c(1, colorRampPalette(brewer.pal(12, "Paired"))(num.class))
 
   p <- ggplot(melt(M, id.vars = "round")) +
     geom_point(aes(round, value, color = variable), size = 3, shape = 4) +

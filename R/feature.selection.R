@@ -16,13 +16,14 @@
 #' }
 #'
 #' @param output_dir output directory
-#' @param impdata file to import data parameter
+#' @param data path to data directory \link{\code{import.data}}
 #' @param decreasing decreasing = F :least important feature will be dismissed
-#' @param ndismiss how many features (coordinates) should be dismissed? Use just when \code{decreasing=TRUE}.
+#' @param ndismiss how many features (coordinates) should be dismissed? Use just when \code{decreasing=TRUE}
+#' @param fdismissed coordinate names that should be dismissed, before starting to remove coordinates based on feature importance. E.g. fdismissed = c("Phi2","Psi10")
 #' @param nrounds XGBoost parameter: training rounds
 #' @param nthread 0 for all
-#' @param eta XGBoost parameter: learning rate
-#' @param max_depth XGBoost parameter: maximum tree depth
+#' @param eta XGBoost parameter: learning rate; if NA, parameter from train.data file in data directory will be taken
+#' @param max_depth XGBoost parameter: maximum tree depth; if NA, parameter from train.data file in data directory will be taken
 #' @param savemode save xgb models (T/F)
 #' @import xgboost
 #' @import data.table
@@ -35,6 +36,7 @@ feature.selection <- function(output_dir = "./featureSelection",
                               data       = "./data",
                               decreasing = F,
                               ndismiss   = NA,
+                              fdimissed  = NA,
                               nrounds    = 20,
                               nthread    = 0,
                               eta        = NA,
@@ -95,6 +97,11 @@ feature.selection <- function(output_dir = "./featureSelection",
   sts <- as.matrix(sts)
   sts <- sts-matrix(data=1, nrow=nrow(sts)) #for xgboost multi:softprobe (states must begin from 0)
 
+  if(!is.na(fdismissed)){
+    dih <- dih[,-which(label %in% fdismissed)]
+    message(paste("the coordinates ", paste(fdimissed, collapse = " "), " have been removed from the training data...", sep = ""))
+  }
+
   #split train data
   train.index <- fread(paste(data, "train.index", sep = "/"), header = F)$V1
   #train.matrix <- xgb.DMatrix(data = dih[train.index,], label = sts[train.index,])
@@ -112,38 +119,54 @@ feature.selection <- function(output_dir = "./featureSelection",
 
   if(!is.na(ndismiss)){
     selectrounds <- ndismiss-1
+    message(paste("ndismiss = ", ndismiss, ": the first/last ", ndismiss, "coordinates will be dismissed...", sep = ""))
   } else {
     selectrounds <- dim(dih)[2]-1
   }
   M <- matrix(nrow = 1 + selectrounds, ncol = 3 + num.class)
   M <- as.data.frame(M)
   colnames(M) <- c("round", "feature dismissed", "accuracy", 1:num.class)
+  if(!is.na(fdismissed)){
+    M[2,1:length(fdmismissed)] <- fdmismissed
+    M[1,1:length(fdmismissed)] <- 1:fdismissed
+  }
 
   for(i in 0:selectrounds) {
     ##xgboost
-    message(paste("selectround ", i, ": start training model..." ,sep = ""))
-    if(exists("test.index")) {#if(file.exists("data/test.index")) {
-      bst <- xgb.train(data = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,]),#train.matrix,
-                       watchlist = list(train = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,]),
-                                        test  = xgb.DMatrix(data = dih[test.index,], label = sts[test.index,])),#watchlist,
-                       eval_metric = 'merror',
-                       objective = 'multi:softmax',
-                       num_class = num.class,
-                       eta = eta,
-                       nrounds = nrounds,
-                       max_depth = max_depth,
-                       nthread = nthread)
-    } else {
-      bst <- xgb.train(data = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,]),#train.matrix,
-                       watchlist = list(train = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,])),#watchlist,
-                       eval_metric = 'merror',
-                       objective = 'multi:softmax',
-                       num_class = num.class,
-                       eta = eta,
-                       nrounds = nrounds,
-                       max_depth = max_depth,
-                       nthread = nthread)
+    if(!is.na(fdismissed)){
+      i <- length(fdismissed)-1
+      message(paste("starting from selectround ", i, "...", sep = ""))
     }
+    message(paste("selectround ", i, ": start training model..." ,sep = ""))
+    train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
+    if(exists("test.index")) {
+      test.matrix <- xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,])
+      watchlist <- list(train = train.matrix, test = test.matrix)
+    } else {
+      watchlist <- list(train = train.matrix)
+    }
+    # if(exists("test.index")) {#if(file.exists("data/test.index")) {
+    #   bst <- xgb.train(data = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,]),#train.matrix,
+    #                    watchlist = list(train = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,]),
+    #                                     test  = xgb.DMatrix(data = dih[test.index,], label = sts[test.index,])),#watchlist,
+    #                    eval_metric = 'merror',
+    #                    objective = 'multi:softmax',
+    #                    num_class = num.class,
+    #                    eta = eta,
+    #                    nrounds = nrounds,
+    #                    max_depth = max_depth,
+    #                    nthread = nthread)
+    # } else {
+      bst <- xgb.train(data = train.matrix,#xgb.DMatrix(data = dih[train.index,], label = sts[train.index,]),#train.matrix,
+                       watchlist = watchlist,#list(train = xgb.DMatrix(data = dih[train.index,], label = sts[train.index,])),#
+                       eval_metric = 'merror',
+                       objective = 'multi:softmax',
+                       num_class = num.class,
+                       eta = eta,
+                       nrounds = nrounds,
+                       max_depth = max_depth,
+                       nthread = nthread)
+    # }
 
     message("ready...")
     M[i+1,1] <- i
@@ -180,7 +203,7 @@ feature.selection <- function(output_dir = "./featureSelection",
         dih <- as.matrix(dih)
         colnames(dih) <- as.character(imp[2,1])
       }
-      #train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
+      # train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
       # if(file.exists("data/test.index")) {
       #   test.matrix <- xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,])
       #   watchlist <- list(train = train.matrix, test = test.matrix)

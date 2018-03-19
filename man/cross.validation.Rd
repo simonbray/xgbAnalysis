@@ -14,8 +14,6 @@ cross.validation(pre = "", nfold, nthread, nrounds, testparname = NA,
 
 \item{nrounds}{number of training rounds}
 
-\item{testparname}{}
-
 \item{plot}{should results be plotted, default=TRUE}
 
 \item{pdim}{dimension of plot, default=10}
