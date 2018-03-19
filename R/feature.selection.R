@@ -129,14 +129,14 @@ feature.selection <- function(output_dir = "./featureSelection",
   if(!is.na(fdismissed[1])){
     M[1:length(fdismissed),1] <- 1:length(fdismissed)
     M[1:length(fdismissed),2] <- fdismissed
+    start <- length(fdismissed)
+    message(paste("starting from selectround ", start, "...", sep = ""))
+  } else {
+    start <- 0
   }
 
-  for(i in 0:selectrounds) {
+  for(i in start:selectrounds) {
     ##xgboost
-    if(!is.na(fdismissed[1])&&i==0){
-      i <- length(fdismissed)
-      message(paste("starting from selectround ", i, "...", sep = ""))
-    }
     message(paste("selectround ", i, ": start training model..." ,sep = ""))
     train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
     if(exists("test.index")) {

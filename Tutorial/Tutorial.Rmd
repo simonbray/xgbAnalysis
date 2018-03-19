@@ -108,7 +108,7 @@ TODO description
 
 ```{r}
 feature.selection(output_dir = "./featureSelection",
-                  impdata    = "./data/import.data.parameter",
+                  data       = "./data",
                   decreasing = F,
                   eta        = 0.3,
                   max_depth  = 6,
@@ -146,7 +146,7 @@ Dismissing the coordinates decreasingly, the most important coordinate will be d
 
 ```{r}
 feature.selection(output_dir = "./featureSelection_decreasing",
-                  impdata    = "./data/import.data.parameter",
+                  data       = "./data",
                   decreasing = T,
                   eta        = 0.3,
                   max_depth  = 6,
@@ -161,6 +161,23 @@ Plot the feature selection decreasing
 plt.feature.selection(dir      = "./featureSelection_decreasing",
                       saveplot = F)
 ```
+
+If you want to continue a previous not finished feature selection or you want to dismiss certain features from the beginning, you can give a vector (`fdismissed`) with the names of the features (coordinates), that will be dismissed before the first iteration. To define how many features (coordinates) should be dismissed at all, use `ndismiss`
+
+```{r}
+feature.selection(output_dir = "./featureSelection_decreasing",
+                  data       = "./data",
+                  decreasing = T,
+                  ndismiss   = 8,
+                  fdismissed = c("Phi2", "Psi13", "Psi4"),
+                  eta        = 0.3,
+                  max_depth  = 6,
+                  nrounds    = 2,
+                  nthread    = 0,
+                  savemode   = T)
+```
+
+This will remove the coordinates "Phi2", "Psi13" and "Psi4" from the data set before starting to remove the most important coordinate for 5 iterations.
 
 ### Single Class Importance
 
