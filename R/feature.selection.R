@@ -97,7 +97,7 @@ feature.selection <- function(output_dir = "./featureSelection",
   sts <- as.matrix(sts)
   sts <- sts-matrix(data=1, nrow=nrow(sts)) #for xgboost multi:softprobe (states must begin from 0)
 
-  if(!is.na(fdismissed)){
+  if(!is.na(fdismissed[1])){
     dih <- dih[,-which(label %in% fdismissed)]
     message(paste("the coordinates ", paste(fdismissed, collapse = " "), " have been removed from the training data...", sep = ""))
   }
@@ -126,14 +126,14 @@ feature.selection <- function(output_dir = "./featureSelection",
   M <- matrix(nrow = 1 + selectrounds, ncol = 3 + num.class)
   M <- as.data.frame(M)
   colnames(M) <- c("round", "feature dismissed", "accuracy", 1:num.class)
-  if(!is.na(fdismissed)){
-    M[2,1:length(fdmismissed)] <- fdmismissed
+  if(!is.na(fdismissed[1])){
+    M[2,1:length(fdmismissed)] <- fdismissed
     M[1,1:length(fdmismissed)] <- 1:fdismissed
   }
 
   for(i in 0:selectrounds) {
     ##xgboost
-    if(!is.na(fdismissed)){
+    if(!is.na(fdismissed[1])){
       i <- length(fdismissed)-1
       message(paste("starting from selectround ", i, "...", sep = ""))
     }
