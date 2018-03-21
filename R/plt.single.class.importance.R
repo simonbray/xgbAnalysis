@@ -30,7 +30,7 @@ plt.single.class.importance <- function(pre       = "singleClassImportance/sci",
 
   dir.create(dirname(pre), showWarnings = F)
   if(is.na(names))  {
-    label <- fread("feature.names", header = F)$V1
+    label <- fread("./data/feature.names", header = F)$V1
   } else {
     label <- fread(names, sep = "/", header = F)$V1
     if(substr(label[1],1,1)=="#"){

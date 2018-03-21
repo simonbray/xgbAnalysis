@@ -28,9 +28,6 @@ plt.feature.selection <- function(dir = "featureSelection",
   # } else {
   #   dir <- "./feature.selection/increasing"
   # }
-  if(!dir.exists(paste(dir, "plot", sep = "/"))){
-    dir.create(paste(dir, "plot", sep = "/"), showWarnings = F)
-  }
   if(!file.exists(paste(dir, "/feature.selection", sep = "/")))  {
     stop("File 'feature.selection' not found. Run function 'feature.selection' first!")
   }
@@ -76,6 +73,9 @@ plt.feature.selection <- function(dir = "featureSelection",
   }
   if(!is.na(xlim[1]) | !is.na(ylim[1]) & saveplot) {
     if(saveplot){
+      if(!dir.exists(paste(dir, "plot", sep = "/"))){
+        dir.create(paste(dir, "plot", sep = "/"), showWarnings = F)
+      }
       ggsave(filename = paste(dir, "/plot/", pre, "zoom.png", sep = ""),
              p, width = pdim*width, height = pdim)
     }

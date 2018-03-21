@@ -52,11 +52,11 @@ feature.selection <- function(output_dir = "./featureSelection",
   label <- prm$labels
 
   if(is.na(eta)){
-    eta <- get.parameter(params    = paste(data, "training.parameter", sep = "/"),
+    eta <- get.parameter(params    = paste(data, "train.parameter", sep = "/"),
                          parameter = "eta")
   }
   if(is.na(max_depth)){
-    max_depth <- get.parameter(params    = paste(data, "training.parameter", sep = "/"),
+    max_depth <- get.parameter(params    = paste(data, "train.parameter", sep = "/"),
                                parameter = "max_depth")
   }
   # if(decreasing){
@@ -127,7 +127,7 @@ feature.selection <- function(output_dir = "./featureSelection",
   M <- as.data.frame(M)
   colnames(M) <- c("round", "feature dismissed", "accuracy", 1:num.class)
   if(!is.na(fdismissed[1])){
-    M[1:length(fdismissed),1] <- 1:length(fdismissed)
+    M[1:length(fdismissed),1] <- 0:(length(fdismissed)-1)
     M[1:length(fdismissed),2] <- fdismissed
     start <- length(fdismissed)
     message(paste("starting from selectround ", start, "...", sep = ""))
@@ -170,7 +170,7 @@ feature.selection <- function(output_dir = "./featureSelection",
 
     message("ready...")
     M[i+1,1] <- i
-    pred <- predict(bst, xgb.DMatrix(data = dih[test.index,], label = sts[test.index,]))#test.matrix)
+    pred <- predict(bst, xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,]))#test.matrix)
     M[i+1, 3] <- round(sum(pred == test.label)/(length(pred)), 4)
     for(j in 0:(num.class-1)){
       M[i+1,j+4] <- round(sum((test.label == j) & (pred == j))/sum(test.label == j) -
