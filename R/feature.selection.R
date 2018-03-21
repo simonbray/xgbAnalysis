@@ -137,11 +137,11 @@ feature.selection <- function(output_dir = "./featureSelection",
 
   for(i in start:selectrounds) {
     ##xgboost
-    message(paste("selectround ", i, ": start training model..." ,sep = ""))
-    if(is.null(dim(dih))){
+    if((ndismiss-length(fdismissed))==1){
       dih <- as.matrix(dih)
-      colnames(dih) <- as.character(imp[2,1])
+      colnames(dih) <- as.character(label[!(label%in%fdismissed)])
     }
+    message(paste("selectround ", i, ": start training model..." ,sep = ""))
     train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
     if(exists("test.index")) {
       test.matrix <- xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,])
@@ -203,10 +203,10 @@ feature.selection <- function(output_dir = "./featureSelection",
     }
     if(i<selectrounds){
       dih <- dih[,colnames(dih)!=as.character(imp[1,1])]
-      # if(is.null(dim(dih))){
-      #   dih <- as.matrix(dih)
-      #   colnames(dih) <- as.character(imp[2,1])
-      # }
+      if(is.null(dim(dih))){
+        dih <- as.matrix(dih)
+        colnames(dih) <- as.character(imp[2,1])
+      }
       # train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
       # if(file.exists("data/test.index")) {
       #   test.matrix <- xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,])
