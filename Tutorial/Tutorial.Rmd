@@ -211,3 +211,22 @@ plt.single.class.importance(pre       = "./singleClassImportance/sci",
                             colmin    = c(0,0.2,0.5),
                             nfeatures = c(4,5,6))
 ```
+
+###Parameter Testing
+
+To test the influence of different parameter on the prediction accuracy of the trained model, the parameter test fuction can be used. The `defpar` parameter defines, which training parameter should be used as base. `defpar = 'default'` uses the XGBoost default parameter. `defpar = NA` will take the parameter set in the `train.parameter` file within the data directory. The training parameter can also be set manually with `defpar = list(eta=0.3, gamma=0, max_depth=6, min_child_weight=1, subsample=1, colsample_bytree=1)`.
+The parameters to test should be given as data frame in the following format:
+`data.frame(parameter = c(start, stop, stepsize, adjust nrounds(T/F)))`. As some parameter influence the computation time, more training rounds are neccesary to get comparable results of the prediction accuracy. Therefore, `T/F` parameter defines wether to adjust the training rounds by `nrounds*(max_value/current_value)`. 
+
+```{r}
+parameter.test(data       = "./data",
+               output_dir = "./parameterTest",
+               nthread    = 0,
+               nrounds    = 10,
+               defpar     = 'default',
+               testpar    = data.frame(eta = c(0.1, 0.5, 0.1, T),
+                                       max_depth = c(3, 10, 1, T))
+               )
+```
+
+This will produce two plots in the output directory, showing the the prediction accuracy in dependence of the learning rate `eta` and the maximum tree depth `max_depth`.

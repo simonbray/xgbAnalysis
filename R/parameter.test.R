@@ -2,7 +2,7 @@
 # @param savefolder
 #' @param nthread number of CPU cores to use, NA for all
 #' @param nrounds number of training rounds
-#' @param defpar default parameter, default = list(eta=0.3, gamma=0, max_depth=6, min_child_weight=1, subsample=1, colsample_bytree=1)
+#' @param defpar default parameter; defpar = NA: will take parameter from train.parameter file in data directory; defpar = 'default' => defpar = list(eta=0.3, gamma=0, max_depth=6, min_child_weight=1, subsample=1, colsample_bytree=1)
 #' @param testpar list of parameter to test: data.frame(parameter name = c(start, stop, stepsize, adjust nrounds(T/F)), eta = c(0.1,0.5,0.1,T))
 #' @param plot should results be plotted, default=TRUE
 #' @param pdim dimension of plot, default=10
@@ -11,33 +11,41 @@
 #' @import ggplot2
 #' @import xgboost
 #' @example
-#' parameter.test(nthread = 12, nrounds = 20, testpar = data.frame(eta = c(0.1, 0.5, 0.1, T), max_depth = c(3, 10, 1, T)))
+#' parameter.test(nthread = 12, nrounds = 20, defpar = NA, testpar = data.frame(eta = c(0.1, 0.5, 0.1, T), max_depth = c(3, 10, 1, T)))
+#' parameter.test(nthread = 12, nrounds = 20, defpar = 'defpar', testpar = data.frame(eta = c(0.1, 0.5, 0.1, T), max_depth = c(3, 10, 1, T)))
+#' parameter.test(nthread = 12, nrounds = 20, defpar = list(...), testpar = data.frame(eta = c(0.1, 0.5, 0.1, T), max_depth = c(3, 10, 1, T)))
 #' @export
 #TODO: dir; defpar--train.parameter
-parameter.test <- function(#savefolder,
-                           nthread,
+parameter.test <- function(data    = "./data",
+                           output_dir = "./testpar",
+                           nthread = 0,
                            nrounds,
-                           defpar = list(objective = "multi:softmax",
-                                         num_class = 2,
-                                         eta= 0.3,
-                                         gamma=0,
-                                         max_depth=6,
-                                         min_child_weight=1,
-                                         subsample=1,
-                                         colsample_bytree=1),
+                           defpar  = NA,
                            testpar,
-                           plot=T,
-                           pdim=10,
-                           width=1.5) {
+                           plot    = T,
+                           pdim    = 10,
+                           width   = 1.5) {
 
-  train.matrix <- xgb.DMatrix("train.matrix.data")
-  test.matrix <- xgb.DMatrix("test.matrix.data")
+  if(defpar == "default"){
+    defpar  = list(objective = "multi:softmax",
+                   num_class = 2,
+                   eta= 0.3,
+                   gamma=0,
+                   max_depth=6,
+                   min_child_weight=1,
+                   subsample=1,
+                   colsample_bytree=1)
+  } else if (is.na(defpar)) {
+    defpar <- as.list(fread(paste(data, "train.parameter", sep = "/")))
+  }
+
+  train.matrix <- xgb.DMatrix(paste(data, "train.matrix.data", sep = "/"))
+  test.matrix <- xgb.DMatrix(paste(data, "test.matrix.data", sep = "/"))
   watchlist <- c(train = train.matrix, test = test.matrix)
+  if(!dir.exists(output_dir)){
+    dir.create(output_dir, showWarnings = F)
+  }
 
-  dir.create("partest")
-  dir <- "partest"
-
-  #num.class <- get.num.class(train.matrix, test.matrix)
   defpar$num_class <- get.num.class(train.matrix, test.matrix)
 
   #loop for every parameter
@@ -105,7 +113,7 @@ parameter.test <- function(#savefolder,
                 theme(plot.subtitle = element_text(size = pdim))
       }
       #save plot
-      ggsave(filename = paste(dir, "/partest_", pm, ".png", sep = ""),
+      ggsave(filename = paste(output_dir, "/partest_", pm, ".png", sep = ""),
              p, width = pdim*width, height = pdim)
 
     }

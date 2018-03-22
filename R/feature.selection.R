@@ -36,7 +36,7 @@ feature.selection <- function(output_dir = "./featureSelection",
                               data       = "./data",
                               decreasing = F,
                               ndismiss   = NA,
-                              fdismissed  = NA,
+                              fdismissed = NA,
                               nrounds    = 20,
                               nthread    = 0,
                               eta        = NA,
@@ -119,7 +119,7 @@ feature.selection <- function(output_dir = "./featureSelection",
 
   if(!is.na(ndismiss)){
     selectrounds <- ndismiss-1
-    message(paste("ndismiss = ", ndismiss, ": the first/last ", ndismiss, "coordinates will be dismissed...", sep = ""))
+    message(paste("ndismiss = ", ndismiss, ": the first/last ", ndismiss, " coordinates will be dismissed...", sep = ""))
   } else {
     selectrounds <- dim(dih)[2]-1
   }
@@ -130,18 +130,18 @@ feature.selection <- function(output_dir = "./featureSelection",
     M[1:length(fdismissed),1] <- 0:(length(fdismissed)-1)
     M[1:length(fdismissed),2] <- fdismissed
     start <- length(fdismissed)
-    message(paste("starting from selectround ", start, "...", sep = ""))
+    message(paste("starting with selectround ", start, "...", sep = ""))
   } else {
     start <- 0
   }
 
   for(i in start:selectrounds) {
     ##xgboost
-    if((ndismiss-length(fdismissed))==1){
+    if(!is.na(ndismiss)&&(ndismiss-length(fdismissed))==1){
       dih <- as.matrix(dih)
       colnames(dih) <- as.character(label[!(label%in%fdismissed)])
     }
-    message(paste("selectround ", i, ": start training model..." ,sep = ""))
+    message(paste("selectround ", i, "/", selectrounds, ": start training model..." ,sep = ""))
     train.matrix <- xgb.DMatrix(data = as.matrix(dih[train.index,]), label = sts[train.index,])
     if(exists("test.index")) {
       test.matrix <- xgb.DMatrix(data = as.matrix(dih[test.index,]), label = sts[test.index,])
